@@ -12,7 +12,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/fornecedores")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = {
+    "http://localhost:4200",
+    "https://didactic-space-capybara-rwgp7p7rvvgfpg79-4200.app.github.dev",
+    "https://entra21-frontend-tcc.vercel.app"
+})
 public class FornecedorController {
 
     @Autowired
