@@ -33,4 +33,4 @@ EXPOSE 8080
 # -Xmx256m: Define o heap máximo em 256MB.
 # -XX:MaxMetaspaceSize=96m: Limita a memória para metadados de classes.
 # "exec" permite que a aplicação receba sinais do Docker corretamente
-ENTRYPOINT ["exec", "java", "-Xmx256m", "-XX:MaxMetaspaceSize=96m", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-Xmx256m", "-XX:MaxMetaspaceSize=96m", "-jar", "app.jar"]
