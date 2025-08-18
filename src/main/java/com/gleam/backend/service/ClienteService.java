@@ -29,7 +29,7 @@ public class ClienteService {
         }
         Cliente cliente = new Cliente();
         cliente.setNome(dto.getNome());
-        cliente.setEmail(dto.getEmail());
+
         cliente.setTelefone(dto.getTelefone());
         cliente.setCpf(dto.getCpf());
         cliente.setDescricao(dto.getDescricao());
@@ -48,7 +48,7 @@ public class ClienteService {
                 .orElseThrow(() -> new EntityNotFoundException("Cliente não encontrado com o ID: " + id));
 
         clienteExistente.setNome(dto.getNome());
-        clienteExistente.setEmail(dto.getEmail());
+       
         clienteExistente.setTelefone(dto.getTelefone());
         clienteExistente.setCpf(dto.getCpf());
         clienteExistente.setDescricao(dto.getDescricao());
