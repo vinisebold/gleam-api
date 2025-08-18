@@ -15,6 +15,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 
+import java.math.BigDecimal;
 @EnableCaching
 @SpringBootApplication
 public class BackendApplication {
