@@ -25,14 +25,13 @@ public class Produto {
     @Column(nullable = false)
     private Acabamento acabamento;
 
-    @Column(name = "codigofornecedor", unique = true) // << ALTERADO AQUI
-    private String codigoFornecedor; // << ALTERADO AQUI
+    @Column(name = "codigofornecedor", unique = true)
+    private String codigoFornecedor;
 
     private String imagem;
 
-    @ManyToOne
-    @JoinColumn(name = "id_categoria")
-    private Categoria categoria;
+    @Column(name = "categoria")
+    private String categoria;
 
     @ManyToOne
     @JoinColumn(name = "id_fornecedor")

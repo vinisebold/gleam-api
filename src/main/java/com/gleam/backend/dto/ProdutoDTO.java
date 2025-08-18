@@ -12,6 +12,6 @@ public class ProdutoDTO {
     private Integer acabamento;
     private String codigoFornecedor;
     private String imagem;
-    private Long idCategoria;
     private Long idFornecedor;
+    private String categoria;
 }
