@@ -15,7 +15,7 @@ public class Produto {
     private String nome;
     private String descricao;
 
-    @Column(nullable = false, precision = 10, scale = 2)
+    @Column(precision = 10, scale = 2)
     private BigDecimal precoVenda;
 
     @Column(nullable = false, precision = 10, scale = 2)
