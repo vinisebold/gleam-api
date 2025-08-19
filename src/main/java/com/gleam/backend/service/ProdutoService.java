@@ -38,7 +38,6 @@ public class ProdutoService {
         }
         Produto produto = new Produto();
         produto.setNome(produtoDTO.getNome());
-        produto.setDescricao(produtoDTO.getDescricao());
         produto.setPrecoVenda(produtoDTO.getPrecoVenda());
         produto.setPrecoCusto(produtoDTO.getPrecoCusto());
         produto.setCodigoFornecedor(prefixo);
@@ -65,7 +64,6 @@ public class ProdutoService {
             );
         }
         produtoExistente.setNome(produtoDTO.getNome());
-        produtoExistente.setDescricao(produtoDTO.getDescricao());
         produtoExistente.setPrecoVenda(produtoDTO.getPrecoVenda());
         produtoExistente.setPrecoCusto(produtoDTO.getPrecoCusto());
         produtoExistente.setCodigoFornecedor(prefixo);
