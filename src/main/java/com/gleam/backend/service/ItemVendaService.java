@@ -6,49 +6,62 @@ import com.gleam.backend.model.ItemVendaId;
 import com.gleam.backend.model.Produto;
 import com.gleam.backend.model.Venda;
 import com.gleam.backend.repository.ItemVendaRepository;
-import com.gleam.backend.repository.ProdutoRepository; // ALTERAÇÃO: Import
-import com.gleam.backend.repository.VendaRepository;   // ALTERAÇÃO: Import
-import jakarta.persistence.EntityNotFoundException;     // ALTERAÇÃO: Import
+import com.gleam.backend.repository.ProdutoRepository;
+import com.gleam.backend.repository.VendaRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 public class ItemVendaService {
 
     @Autowired
     private ItemVendaRepository itemVendaRepository;
-
-    // ALTERAÇÃO: Injetar repositórios para buscar as entidades
     @Autowired
     private VendaRepository vendaRepository;
-
     @Autowired
     private ProdutoRepository produtoRepository;
 
-    @Transactional // ALTERAÇÃO: Garante que todas as operações sejam feitas em uma única transação
-    public ItemVenda save(ItemVendaDTO itemVendaDTO) {
-        // ALTERAÇÃO: Buscar a Venda para garantir que ela existe
-        Venda venda = vendaRepository.findById(itemVendaDTO.getIdVenda())
-                .orElseThrow(() -> new EntityNotFoundException("Venda não encontrada com o ID: " + itemVendaDTO.getIdVenda()));
+    /**
+     * Adiciona um item a uma venda existente.
+     * @param dto Os dados do item a ser adicionado.
+     * @return O ItemVenda salvo.
+     */
+    @Transactional
+    public ItemVenda save(ItemVendaDTO dto) {
+        // 1. Busca a Venda e o Produto para garantir que ambos existem.
+        Venda venda = vendaRepository.findById(dto.getIdVenda())
+                .orElseThrow(() -> new EntityNotFoundException("Venda não encontrada com o ID: " + dto.getIdVenda()));
 
-        // ALTERAÇÃO: Buscar o Produto para garantir que ele existe e para pegar seu preço
-        Produto produto = produtoRepository.findById(itemVendaDTO.getIdProduto())
-                .orElseThrow(() -> new EntityNotFoundException("Produto não encontrado com o ID: " + itemVendaDTO.getIdProduto()));
+        Produto produto = produtoRepository.findById(dto.getIdProduto())
+                .orElseThrow(() -> new EntityNotFoundException("Produto não encontrado com o ID: " + dto.getIdProduto()));
 
-        // Criar o ID composto para o ItemVenda
+        // 2. Cria a chave primária composta.
         ItemVendaId id = new ItemVendaId(venda.getId(), produto.getId());
 
         ItemVenda itemVenda = new ItemVenda();
         itemVenda.setId(id);
-        itemVenda.setVenda(venda);     // Associa a entidade Venda completa
-        itemVenda.setProduto(produto); // Associa a entidade Produto completa
-        itemVenda.setQuantidade(itemVendaDTO.getQuantidade());
+        itemVenda.setVenda(venda);
+        itemVenda.setProduto(produto);
+        itemVenda.setQuantidade(dto.getQuantidade());
 
-        // ALTERAÇÃO CRÍTICA: Definir o preço unitário com base no preço de venda do produto
-        // Isso evita que o frontend manipule o preço.
+        // 3. PONTO CRÍTICO DE SEGURANÇA: O preço é definido pelo backend.
+        // Ignoramos qualquer preço que possa vir do frontend e usamos o preço
+        // que está cadastrado no banco de dados para o produto.
         itemVenda.setPrecoUnitario(produto.getPrecoVenda());
 
         return itemVendaRepository.save(itemVenda);
+    }
+
+    /**
+     * Busca todos os itens de uma venda específica.
+     * @param idVenda O ID da venda.
+     * @return Uma lista de ItemVenda.
+     */
+    public List<ItemVenda> findByVenda(Long idVenda) {
+        return itemVendaRepository.findByVendaId(idVenda);
     }
 }
