@@ -1,5 +1,6 @@
 package com.gleam.backend.dto;
 
+import com.gleam.backend.enums.Acabamento;
 import lombok.Data;
 import java.math.BigDecimal;
 

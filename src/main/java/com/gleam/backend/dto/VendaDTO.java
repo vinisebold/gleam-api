@@ -1,6 +1,6 @@
 package com.gleam.backend.dto;
 
-import com.gleam.backend.enums.StatusVenda;
+
 import lombok.Data;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
