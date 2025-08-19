@@ -2,7 +2,6 @@ package com.gleam.backend.controller;
 
 import com.gleam.backend.dto.ProdutoDTO;
 import com.gleam.backend.model.Produto;
-import com.gleam.backend.repository.ProdutoRepository;
 import com.gleam.backend.service.ProdutoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,12 +18,8 @@ public class ProdutoController {
     @Autowired
     private ProdutoService produtoService;
 
-    @Autowired
-    private ProdutoRepository produtoRepository; // Usado para buscas simples
-
     /**
      * Endpoint para CRIAR um novo produto.
-     * A lógica de gerar o 'codigofornecedor' está dentro do service.
      * HTTP POST /api/produtos
      */
     @PostMapping
@@ -33,7 +28,6 @@ public class ProdutoController {
             Produto novoProduto = produtoService.save(produtoDTO);
             return ResponseEntity.ok(novoProduto);
         } catch (Exception e) {
-            // Retorna uma resposta de erro clara para o frontend
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
@@ -44,7 +38,7 @@ public class ProdutoController {
      */
     @GetMapping
     public ResponseEntity<List<Produto>> getAllProdutos() {
-        List<Produto> produtos = produtoRepository.findAll();
+        List<Produto> produtos = produtoService.findAll();
         return ResponseEntity.ok(produtos);
     }
 
@@ -55,7 +49,7 @@ public class ProdutoController {
      */
     @GetMapping("/paginado")
     public ResponseEntity<Page<Produto>> getAllProdutosPaginado(Pageable pageable) {
-        Page<Produto> produtos = produtoRepository.findAll(pageable);
+        Page<Produto> produtos = produtoService.findAll(pageable);
         return ResponseEntity.ok(produtos);
     }
 
@@ -64,10 +58,26 @@ public class ProdutoController {
      * HTTP GET /api/produtos/{id}
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Produto> getProdutoById(@PathVariable Long id) {
-        return produtoRepository.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<?> getProdutoById(@PathVariable Long id) {
+        try {
+            Produto produto = produtoService.findById(id);
+            return ResponseEntity.ok(produto);
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    /**
+     * Endpoint para LER (buscar) produtos filtrados por fornecedor, de forma paginada.
+     * HTTP GET /api/produtos/fornecedor/{fornecedorId}
+     */
+    @GetMapping("/fornecedor/{fornecedorId}")
+    public ResponseEntity<Page<Produto>> getProdutosByFornecedor(
+            @PathVariable Long fornecedorId,
+            Pageable pageable) {
+
+        Page<Produto> produtos = produtoService.findByFornecedor(fornecedorId, pageable);
+        return ResponseEntity.ok(produtos);
     }
 
     /**

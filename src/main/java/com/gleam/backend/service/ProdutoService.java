@@ -38,8 +38,10 @@ public class ProdutoService {
         }
         Produto produto = new Produto();
         produto.setNome(produtoDTO.getNome());
+
         produto.setPrecoVenda(produtoDTO.getPrecoVenda());
         produto.setPrecoCusto(produtoDTO.getPrecoCusto());
+
         produto.setCodigoFornecedor(prefixo);
         produto.setCategoria(produtoDTO.getCategoria());
         Integer acabamentoIndex = produtoDTO.getAcabamento();
@@ -64,8 +66,10 @@ public class ProdutoService {
             );
         }
         produtoExistente.setNome(produtoDTO.getNome());
+
         produtoExistente.setPrecoVenda(produtoDTO.getPrecoVenda());
         produtoExistente.setPrecoCusto(produtoDTO.getPrecoCusto());
+        ;
         produtoExistente.setCodigoFornecedor(prefixo);
         produtoExistente.setCategoria(produtoDTO.getCategoria());
         Integer acabamentoIndex = produtoDTO.getAcabamento();
@@ -96,7 +100,6 @@ public class ProdutoService {
         return totalEntradas - totalSaidas;
     }
 
-    // << MÉTODOS DE LEITURA ADICIONADOS >>
     public List<Produto> findAll() {
         return produtoRepository.findAll();
     }
@@ -108,6 +111,16 @@ public class ProdutoService {
     public Produto findById(Long id) {
         return produtoRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Produto não encontrado com o ID: " + id));
+    }
+
+    /**
+     * Busca uma lista paginada de produtos por ID do fornecedor.
+     * @param fornecedorId O ID do fornecedor para filtrar.
+     * @param pageable Informações de paginação.
+     * @return Uma página de produtos.
+     */
+    public Page<Produto> findByFornecedor(Long fornecedorId, Pageable pageable) {
+        return produtoRepository.findByFornecedorId(fornecedorId, pageable);
     }
 
     private String getPrefixoPorCategoria(Fornecedor fornecedor, String nomeCategoria) {
