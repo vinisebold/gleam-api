@@ -28,8 +28,6 @@ public class Produto {
     @Column(name = "codigofornecedor", unique = true)
     private String codigoFornecedor;
 
-    private String imagem;
-
     @Column(name = "categoria")
     private String categoria;
 

@@ -27,8 +27,6 @@ public class ProdutoService {
     @Autowired
     private MovimentacaoEstoqueRepository movimentacaoEstoqueRepository;
 
-    // ... Métodos save, update, delete e getQuantidadeTotal (sem alterações) ...
-
     public Produto save(ProdutoDTO produtoDTO) {
         Fornecedor fornecedor = fornecedorRepository.findById(produtoDTO.getIdFornecedor())
                 .orElseThrow(() -> new EntityNotFoundException("Fornecedor não encontrado com o ID: " + produtoDTO.getIdFornecedor()));
@@ -43,7 +41,6 @@ public class ProdutoService {
         produto.setDescricao(produtoDTO.getDescricao());
         produto.setPrecoVenda(produtoDTO.getPrecoVenda());
         produto.setPrecoCusto(produtoDTO.getPrecoCusto());
-        produto.setImagem(produtoDTO.getImagem());
         produto.setCodigoFornecedor(prefixo);
         produto.setCategoria(produtoDTO.getCategoria());
         Integer acabamentoIndex = produtoDTO.getAcabamento();
@@ -71,7 +68,6 @@ public class ProdutoService {
         produtoExistente.setDescricao(produtoDTO.getDescricao());
         produtoExistente.setPrecoVenda(produtoDTO.getPrecoVenda());
         produtoExistente.setPrecoCusto(produtoDTO.getPrecoCusto());
-        produtoExistente.setImagem(produtoDTO.getImagem());
         produtoExistente.setCodigoFornecedor(prefixo);
         produtoExistente.setCategoria(produtoDTO.getCategoria());
         Integer acabamentoIndex = produtoDTO.getAcabamento();

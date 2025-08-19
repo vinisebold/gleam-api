@@ -66,7 +66,7 @@ public class ProdutoController {
     @GetMapping("/{id}")
     public ResponseEntity<Produto> getProdutoById(@PathVariable Long id) {
         return produtoRepository.findById(id)
-                .map(produto -> ResponseEntity.ok(produto))
+                .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
@@ -92,7 +92,7 @@ public class ProdutoController {
     public ResponseEntity<Void> deleteProduto(@PathVariable Long id) {
         try {
             produtoService.delete(id);
-            return ResponseEntity.noContent().build(); // Retorna 204 No Content
+            return ResponseEntity.noContent().build();
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }

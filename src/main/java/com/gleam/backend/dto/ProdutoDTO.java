@@ -11,7 +11,6 @@ public class ProdutoDTO {
     private BigDecimal precoCusto;
     private Integer acabamento;
     private String codigoFornecedor;
-    private String imagem;
     private Long idFornecedor;
     private String categoria;
 }
