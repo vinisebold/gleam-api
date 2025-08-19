@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 public class VendaDTO {
     private Long idCliente;
     private BigDecimal valorTotal;
-    private String status; // Ex: "PENDENTE", "CONCLUIDA", "CANCELADA"
+    private String status;
     private LocalDateTime dataVenda;
 
 }
