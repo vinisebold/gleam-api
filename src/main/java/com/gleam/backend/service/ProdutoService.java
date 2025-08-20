@@ -1,121 +1,119 @@
 package com.gleam.backend.service;
 
 import com.gleam.backend.dto.ProdutoDTO;
-import com.gleam.backend.enums.Acabamento;
-import com.gleam.backend.enums.TipoMovimentacao;
 import com.gleam.backend.model.Fornecedor;
-import com.gleam.backend.model.MovimentacaoEstoque;
 import com.gleam.backend.model.Produto;
 import com.gleam.backend.repository.FornecedorRepository;
-import com.gleam.backend.repository.MovimentacaoEstoqueRepository;
 import com.gleam.backend.repository.ProdutoRepository;
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
+@RequiredArgsConstructor
 public class ProdutoService {
 
-    @Autowired
-    private ProdutoRepository produtoRepository;
-    @Autowired
-    private FornecedorRepository fornecedorRepository;
-    @Autowired
-    private MovimentacaoEstoqueRepository movimentacaoEstoqueRepository;
+    private final ProdutoRepository produtoRepository;
+    private final FornecedorRepository fornecedorRepository;
 
-    public Produto save(ProdutoDTO produtoDTO) {
+    public Page<ProdutoDTO> findAll(Pageable pageable) {
+        return produtoRepository.findAll(pageable).map(this::convertToDto);
+    }
+
+    public Page<ProdutoDTO> findAllDisponiveis(Pageable pageable) {
+        // Agora busca por status 0
+        return produtoRepository.findByStatus(Produto.STATUS_DISPONIVEL, pageable).map(this::convertToDto);
+    }
+
+    public ProdutoDTO findById(Long id) {
+        Produto produto = produtoRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Produto não encontrado com o ID: " + id));
+        return convertToDto(produto);
+    }
+
+    public Page<ProdutoDTO> findByFornecedor(Long fornecedorId, Pageable pageable) {
+        return produtoRepository.findByFornecedorId(fornecedorId, pageable).map(this::convertToDto);
+    }
+
+    public long countDisponiveis() {
+        // Agora conta produtos com status 0
+        return produtoRepository.countByStatus(Produto.STATUS_DISPONIVEL);
+    }
+
+    public ProdutoDTO save(ProdutoDTO produtoDTO) {
         Fornecedor fornecedor = fornecedorRepository.findById(produtoDTO.getIdFornecedor())
                 .orElseThrow(() -> new EntityNotFoundException("Fornecedor não encontrado com o ID: " + produtoDTO.getIdFornecedor()));
 
         Produto produto = new Produto();
-        produto.setNome(produtoDTO.getNome());
-
-        produto.setPrecoVenda(produtoDTO.getPrecoVenda());
-        produto.setPrecoCusto(produtoDTO.getPrecoCusto());
-
+        mapDtoToEntity(produtoDTO, produto, fornecedor);
         produto.setCodigoFornecedor(produtoDTO.getCodigoFornecedor());
-        produto.setCategoria(produtoDTO.getCategoria());
-        Integer acabamentoIndex = produtoDTO.getAcabamento();
-        if (acabamentoIndex != null && acabamentoIndex >= 0 && acabamentoIndex < Acabamento.values().length) {
-            produto.setAcabamento(Acabamento.values()[acabamentoIndex]);
-        } else {
-            throw new IllegalArgumentException("Índice de acabamento inválido: " + acabamentoIndex);
-        }
-        produto.setFornecedor(fornecedor);
-        return produtoRepository.save(produto);
+
+        Produto produtoSalvo = produtoRepository.save(produto);
+        return convertToDto(produtoSalvo);
     }
 
-    public Produto update(Long id, ProdutoDTO produtoDTO) {
+    public ProdutoDTO update(Long id, ProdutoDTO produtoDTO) {
         Produto produtoExistente = produtoRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Produto não encontrado com o ID: " + id));
+
+        // Agora verifica pelo status 1
+        if (produtoExistente.getStatus().equals(Produto.STATUS_VENDIDO)) {
+            throw new IllegalStateException("Não é possível alterar um produto que já foi vendido.");
+        }
+
         Fornecedor fornecedor = fornecedorRepository.findById(produtoDTO.getIdFornecedor())
                 .orElseThrow(() -> new EntityNotFoundException("Fornecedor não encontrado com o ID: " + produtoDTO.getIdFornecedor()));
+
         String prefixo = getPrefixoPorCategoria(fornecedor, produtoDTO.getCategoria());
         if (prefixo == null || prefixo.trim().isEmpty()) {
             throw new EntityNotFoundException(
                     "O fornecedor '" + fornecedor.getNome() + "' não possui um prefixo de código definido para a categoria '" + produtoDTO.getCategoria() + "'."
             );
         }
-        produtoExistente.setNome(produtoDTO.getNome());
 
-        produtoExistente.setPrecoVenda(produtoDTO.getPrecoVenda());
-        produtoExistente.setPrecoCusto(produtoDTO.getPrecoCusto());
-        ;
+        mapDtoToEntity(produtoDTO, produtoExistente, fornecedor);
         produtoExistente.setCodigoFornecedor(prefixo);
-        produtoExistente.setCategoria(produtoDTO.getCategoria());
-        Integer acabamentoIndex = produtoDTO.getAcabamento();
-        if (acabamentoIndex != null && acabamentoIndex >= 0 && acabamentoIndex < Acabamento.values().length) {
-            produtoExistente.setAcabamento(Acabamento.values()[acabamentoIndex]);
-        } else {
-            throw new IllegalArgumentException("Índice de acabamento inválido: " + acabamentoIndex);
-        }
-        produtoExistente.setFornecedor(fornecedor);
-        return produtoRepository.save(produtoExistente);
+
+        Produto produtoSalvo = produtoRepository.save(produtoExistente);
+        return convertToDto(produtoSalvo);
     }
 
     public void delete(Long id) {
-        if (!produtoRepository.existsById(id)) {
-            throw new EntityNotFoundException("Produto não encontrado com o ID: " + id);
+        Produto produto = produtoRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Produto não encontrado com o ID: " + id));
+
+        // Agora verifica pelo status 1
+        if (produto.getStatus().equals(Produto.STATUS_VENDIDO)) {
+            throw new IllegalStateException("Não é possível excluir um produto que já foi vendido. Ele faz parte do histórico de vendas.");
         }
         produtoRepository.deleteById(id);
     }
 
-    public Long getQuantidadeTotal(Long idProduto) {
-        if (!produtoRepository.existsById(idProduto)) {
-            throw new EntityNotFoundException("Produto não encontrado com o ID: " + idProduto);
-        }
-        List<MovimentacaoEstoque> entradas = movimentacaoEstoqueRepository.findByProdutoIdAndTipo(idProduto, TipoMovimentacao.ENTRADA);
-        List<MovimentacaoEstoque> saidas = movimentacaoEstoqueRepository.findByProdutoIdAndTipo(idProduto, TipoMovimentacao.SAIDA);
-        long totalEntradas = entradas.stream().mapToLong(MovimentacaoEstoque::getQuantidade).sum();
-        long totalSaidas = saidas.stream().mapToLong(MovimentacaoEstoque::getQuantidade).sum();
-        return totalEntradas - totalSaidas;
+    private ProdutoDTO convertToDto(Produto produto) {
+        ProdutoDTO dto = new ProdutoDTO();
+        dto.setId(produto.getId());
+        dto.setNome(produto.getNome());
+        dto.setPrecoVenda(produto.getPrecoVenda());
+        dto.setPrecoCusto(produto.getPrecoCusto());
+        dto.setAcabamento(produto.getAcabamento());
+        dto.setCodigoFornecedor(produto.getCodigoFornecedor());
+        dto.setCategoria(produto.getCategoria());
+        dto.setStatus(produto.getStatus());
+        dto.setIdFornecedor(produto.getFornecedor() != null ? produto.getFornecedor().getId() : null);
+        dto.setDataCriacao(produto.getDataCriacao());
+        dto.setDataAtualizacao(produto.getDataAtualizacao());
+        return dto;
     }
 
-    public List<Produto> findAll() {
-        return produtoRepository.findAll();
-    }
-
-    public Page<Produto> findAll(Pageable pageable) {
-        return produtoRepository.findAll(pageable);
-    }
-
-    public Produto findById(Long id) {
-        return produtoRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Produto não encontrado com o ID: " + id));
-    }
-
-    /**
-     * Busca uma lista paginada de produtos por ID do fornecedor.
-     * @param fornecedorId O ID do fornecedor para filtrar.
-     * @param pageable Informações de paginação.
-     * @return Uma página de produtos.
-     */
-    public Page<Produto> findByFornecedor(Long fornecedorId, Pageable pageable) {
-        return produtoRepository.findByFornecedorId(fornecedorId, pageable);
+    private void mapDtoToEntity(ProdutoDTO dto, Produto produto, Fornecedor fornecedor) {
+        produto.setNome(dto.getNome());
+        produto.setPrecoVenda(dto.getPrecoVenda());
+        produto.setPrecoCusto(dto.getPrecoCusto());
+        produto.setAcabamento(dto.getAcabamento());
+        produto.setCategoria(dto.getCategoria());
+        produto.setFornecedor(fornecedor);
     }
 
     private String getPrefixoPorCategoria(Fornecedor fornecedor, String nomeCategoria) {

@@ -2,9 +2,15 @@ package com.gleam.backend.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Data
+@Table(name = "fornecedores") // Boa prática: definir o nome da tabela explicitamente
 public class Fornecedor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,6 +21,16 @@ public class Fornecedor {
     private String telefone;
     private String descricao;
 
+    // --- DATAS AUTOMÁTICAS ---
+    @CreationTimestamp // Define a data/hora no momento da criação
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime dataCriacao; // Renomeado para consistência com as outras entidades
+
+    @UpdateTimestamp // Atualiza a data/hora em qualquer modificação
+    @Column(nullable = false)
+    private LocalDateTime dataAtualizacao;
+
+    // --- CÓDIGOS DE PRODUTO ---
     @Column(name = "codigo_anel")
     private String codigoAnel;
 
@@ -41,4 +57,9 @@ public class Fornecedor {
 
     @Column(name = "codigo_piercing")
     private String codigoPiercing;
+
+    // --- RELACIONAMENTO ---
+    // Útil para poder buscar todos os produtos de um fornecedor diretamente
+    @OneToMany(mappedBy = "fornecedor", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Produto> produtos;
 }

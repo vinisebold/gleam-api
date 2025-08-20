@@ -31,8 +31,7 @@ public class ClienteService {
         cliente.setNome(dto.getNome());
 
         cliente.setTelefone(dto.getTelefone());
-        cliente.setCpf(dto.getCpf());
-        cliente.setDescricao(dto.getDescricao());
+
         return clienteRepository.save(cliente);
     }
 
@@ -50,8 +49,7 @@ public class ClienteService {
         clienteExistente.setNome(dto.getNome());
        
         clienteExistente.setTelefone(dto.getTelefone());
-        clienteExistente.setCpf(dto.getCpf());
-        clienteExistente.setDescricao(dto.getDescricao());
+
 
         return clienteRepository.save(clienteExistente);
     }
