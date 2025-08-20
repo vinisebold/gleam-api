@@ -24,7 +24,7 @@ public class Produto {
     @Column(nullable = false)
     private Acabamento acabamento;
 
-    @Column(name = "codigofornecedor", unique = true)
+    @Column(name = "codigofornecedor", unique = false)
     private String codigoFornecedor;
 
     @Column(name = "categoria")
