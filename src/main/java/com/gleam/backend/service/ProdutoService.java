@@ -30,11 +30,6 @@ public class ProdutoService {
     public Produto save(ProdutoDTO produtoDTO) {
         Fornecedor fornecedor = fornecedorRepository.findById(produtoDTO.getIdFornecedor())
                 .orElseThrow(() -> new EntityNotFoundException("Fornecedor não encontrado com o ID: " + produtoDTO.getIdFornecedor()));
-        String prefixo = getPrefixoPorCategoria(fornecedor, produtoDTO.getCategoria());
-        if (prefixo == null || prefixo.trim().isEmpty()) {
-            throw new EntityNotFoundException(
-                    "O fornecedor '" + fornecedor.getNome() + "' não possui um prefixo de código definido para a categoria '" + produtoDTO.getCategoria() + "'."
-            );
         }
         Produto produto = new Produto();
         produto.setNome(produtoDTO.getNome());
@@ -42,7 +37,7 @@ public class ProdutoService {
         produto.setPrecoVenda(produtoDTO.getPrecoVenda());
         produto.setPrecoCusto(produtoDTO.getPrecoCusto());
 
-        produto.setCodigoFornecedor(prefixo);
+        produto.setCodigoFornecedor(produtoDTO.getCodigoFornecedor());
         produto.setCategoria(produtoDTO.getCategoria());
         Integer acabamentoIndex = produtoDTO.getAcabamento();
         if (acabamentoIndex != null && acabamentoIndex >= 0 && acabamentoIndex < Acabamento.values().length) {
