@@ -30,7 +30,7 @@ public class ProdutoService {
     public Produto save(ProdutoDTO produtoDTO) {
         Fornecedor fornecedor = fornecedorRepository.findById(produtoDTO.getIdFornecedor())
                 .orElseThrow(() -> new EntityNotFoundException("Fornecedor não encontrado com o ID: " + produtoDTO.getIdFornecedor()));
-        }
+
         Produto produto = new Produto();
         produto.setNome(produtoDTO.getNome());
 
