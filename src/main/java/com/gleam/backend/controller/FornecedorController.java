@@ -32,8 +32,8 @@ public class FornecedorController {
      * Chama o método do serviço para aproveitar o cache.
      */
     @GetMapping
-    public ResponseEntity<List<Fornecedor>> getAllFornecedores() {
-        List<Fornecedor> fornecedores = fornecedorService.findAll();
+    public ResponseEntity<List<FornecedorDTO>> getAllFornecedores() {
+        List<FornecedorDTO> fornecedores = fornecedorService.findAll();
         return ResponseEntity.ok(fornecedores);
     }
 

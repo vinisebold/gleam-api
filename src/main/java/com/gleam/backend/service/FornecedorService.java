@@ -10,6 +10,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class FornecedorService {
@@ -23,9 +24,37 @@ public class FornecedorService {
      * Nas chamadas seguintes, retorna o resultado diretamente do cache.
      */
     @Cacheable("fornecedores")
-    public List<Fornecedor> findAll() {
-        System.out.println("A BUSCAR FORNECEDORES NO BANCO DE DADOS...");
-        return fornecedorRepository.findAll();
+    public List<FornecedorDTO> findAll() {
+        System.out.println("A BUSCAR FORNECEDORES NO BANCO DE DADOS E CONVERTENDO PARA DTO...");
+
+        return fornecedorRepository.findAll().stream().map(this::convertToDto).collect(Collectors.toList());
+    }
+
+    /**
+     * ---- MÉTODO PRIVADO P CONVERTER PARA DTO ----
+     * Converte uma entidade Fornecedor para um FornecedorDTO.
+     * @param fornecedor A entidade a ser convertida.
+     * @return O DTO correspondente.
+     */
+    private FornecedorDTO convertToDto(Fornecedor fornecedor) {
+        FornecedorDTO dto = new FornecedorDTO();
+        dto.setId(fornecedor.getId());
+        dto.setNome(fornecedor.getNome());
+        dto.setCnpj(fornecedor.getCnpj());
+        dto.setTelefone(fornecedor.getTelefone());
+        dto.setDescricao(fornecedor.getDescricao());
+        dto.setDataCriacao(fornecedor.getDataCriacao());
+        dto.setDataAtualizacao(fornecedor.getDataAtualizacao());
+        dto.setCodigoAnel(fornecedor.getCodigoAnel());
+        dto.setCodigoBracelete(fornecedor.getCodigoBracelete());
+        dto.setCodigoColar(fornecedor.getCodigoColar());
+        dto.setCodigoBrinco(fornecedor.getCodigoBrinco());
+        dto.setCodigoPulseira(fornecedor.getCodigoPulseira());
+        dto.setCodigoPingente(fornecedor.getCodigoPingente());
+        dto.setCodigoConjunto(fornecedor.getCodigoConjunto());
+        dto.setCodigoBerloque(fornecedor.getCodigoBerloque());
+        dto.setCodigoPiercing(fornecedor.getCodigoPiercing());
+        return dto;
     }
 
     /**
