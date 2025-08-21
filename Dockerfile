@@ -28,9 +28,8 @@ RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 # Muda para o usuário não-root
 USER appuser
 
-# Define o nome esperado do artefato.
-# Substitua 'meu-projeto-0.0.1-SNAPSHOT.jar' pelo nome real do seu JAR, que está no pom.xml.
-ARG JAR_FILE=target/meu-projeto-0.0.1-SNAPSHOT.jar
+# Define o nome do artefato com base no pom.xml.
+ARG JAR_FILE=target/backend-0.0.1-SNAPSHOT.jar
 
 # Copia APENAS o .jar gerado do estágio de build para a imagem final
 COPY --from=build /app/${JAR_FILE} app.jar
