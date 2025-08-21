@@ -11,9 +11,11 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "itens_vendidos")
 public class ItemVendido {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column(nullable = false)
     private Long produtoOriginalId;
     private String nome;
@@ -27,6 +29,11 @@ public class ItemVendido {
     private BigDecimal lucro;
     @Column(nullable = false, updatable = false)
     private LocalDateTime dataVenda;
+
+    // CORREÇÃO AQUI: Adiciona a relação de volta para a RegistrarVenda
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "registrar_venda_id", nullable = false)
+    private RegistrarVenda registrarVenda;
 
     public ItemVendido(Produto produto) {
         this.produtoOriginalId = produto.getId();
