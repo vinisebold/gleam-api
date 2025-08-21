@@ -15,10 +15,10 @@ public class RegistrarVenda {
 
     public static final Integer SITUACAO_PENDENTE = 0;
     public static final Integer SITUACAO_PAGO = 1;
-    public static final Integer PAGAMENTO_PIX = 1;
-    public static final Integer PAGAMENTO_DINHEIRO = 2;
-    public static final Integer PAGAMENTO_CREDITO = 3;
-    public static final Integer PAGAMENTO_DEBITO = 4;
+    public static final Integer PAGAMENTO_PIX = 0;
+    public static final Integer PAGAMENTO_DINHEIRO = 1;
+    public static final Integer PAGAMENTO_CREDITO = 2;
+    public static final Integer PAGAMENTO_DEBITO = 3;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
