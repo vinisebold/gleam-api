@@ -4,33 +4,39 @@ FROM maven:3.9-eclipse-temurin-21 AS build
 
 WORKDIR /app
 
+# Copia primeiro o pom.xml para aproveitar o cache de dependências do Docker
 COPY pom.xml .
-
+# Baixa as dependências. Se o pom.xml não mudar, esta camada não será executada novamente.
 RUN mvn dependency:go-offline
 
+# Agora copia o código-fonte
 COPY src ./src
 
-# Compila o projeto e gera o arquivo .jar
-RUN mvn package -DskipTests
+# Compila o projeto e gera o arquivo .jar (sempre limpa o target antes)
+RUN mvn clean package -DskipTests
 
 
 # ---- Estágio 2: Runtime ----
 # Usamos uma imagem JRE (Java Runtime Environment) mínima baseada em Alpine Linux
-# Esta imagem é muito menor e consome menos memória
 FROM eclipse-temurin:21-jre-alpine
 
 WORKDIR /app
 
-ARG JAR_FILE=/app/target/*.jar
+# Cria um usuário e grupo não-root para rodar a aplicação (melhor prática de segurança)
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+
+# Muda para o usuário não-root
+USER appuser
+
+# Define o nome esperado do artefato.
+# Substitua 'meu-projeto-0.0.1-SNAPSHOT.jar' pelo nome real do seu JAR, que está no pom.xml.
+ARG JAR_FILE=target/meu-projeto-0.0.1-SNAPSHOT.jar
 
 # Copia APENAS o .jar gerado do estágio de build para a imagem final
-COPY --from=build ${JAR_FILE} app.jar
+COPY --from=build /app/${JAR_FILE} app.jar
 
 # Expõe a porta que a aplicação vai usar
 EXPOSE 8080
 
 # Define o comando para iniciar a aplicação com parâmetros de memória OTIMIZADOS
-# -Xmx256m: Define o heap máximo em 256MB.
-# -XX:MaxMetaspaceSize=96m: Limita a memória para metadados de classes.
-# "exec" permite que a aplicação receba sinais do Docker corretamente
 ENTRYPOINT ["java", "-Xmx256m", "-XX:MaxMetaspaceSize=96m", "-jar", "app.jar"]
