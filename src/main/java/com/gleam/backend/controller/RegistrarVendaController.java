@@ -16,9 +16,16 @@ public class RegistrarVendaController {
 
     private final RegistrarVendaService registrarVendaService;
 
-    @PostMapping
-    public ResponseEntity<RegistrarVendaDTO> registrarVenda(@RequestBody RegistrarVendaDTO registrarVendaDTO) {
-        RegistrarVendaDTO novaVenda = registrarVendaService.registrarVenda(registrarVendaDTO);
+    /**
+     * Endpoint para registar a venda de um único produto.
+     * Exemplo: POST /api/registrar-vendas/1
+     */
+    @PostMapping("/{produtoId}")
+    public ResponseEntity<RegistrarVendaDTO> registrarVenda(
+            @PathVariable Long produtoId,
+            @RequestBody RegistrarVendaDTO detalhesVendaDTO) {
+
+        RegistrarVendaDTO novaVenda = registrarVendaService.registrarVenda(produtoId, detalhesVendaDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(novaVenda);
     }
 

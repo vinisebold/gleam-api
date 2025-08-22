@@ -2,9 +2,11 @@ package com.gleam.backend.service;
 
 import com.gleam.backend.dto.ItemVendidoDTO;
 import com.gleam.backend.dto.RegistrarVendaDTO;
+import com.gleam.backend.model.Cliente; // Importe a entidade Cliente
 import com.gleam.backend.model.ItemVendido;
 import com.gleam.backend.model.Produto;
 import com.gleam.backend.model.RegistrarVenda;
+import com.gleam.backend.repository.ClienteRepository; // Importe o repositório do Cliente
 import com.gleam.backend.repository.ProdutoRepository;
 import com.gleam.backend.repository.RegistrarVendaRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -15,7 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,44 +26,38 @@ public class RegistrarVendaService {
 
     private final RegistrarVendaRepository registrarVendaRepository;
     private final ProdutoRepository produtoRepository;
+    private final ClienteRepository clienteRepository; // Nova dependência
 
     @Transactional
-    public RegistrarVendaDTO registrarVenda(RegistrarVendaDTO registrarVendaDTO) {
-        if (registrarVendaDTO.getProdutoIds() == null || registrarVendaDTO.getProdutoIds().isEmpty()) {
-            throw new IllegalArgumentException("A lista de produtos não pode ser vazia.");
-        }
+    public RegistrarVendaDTO registrarVenda(Long produtoId, RegistrarVendaDTO detalhesVendaDTO) {
+        // 1. Buscar o produto a ser vendido
+        Produto produto = produtoRepository.findById(produtoId)
+                .orElseThrow(() -> new EntityNotFoundException("Produto com ID " + produtoId + " não encontrado."));
 
-        // 1. Buscar produtos, calcular total e montar o nome da venda
-        List<Produto> produtosParaVender = new ArrayList<>();
-        List<String> nomesDosProdutos = new ArrayList<>();
-        BigDecimal precoTotal = BigDecimal.ZERO;
+        // 2. Buscar a entidade Cliente usando o ID fornecido no DTO
+        Cliente cliente = clienteRepository.findById(detalhesVendaDTO.getClienteId())
+                .orElseThrow(() -> new EntityNotFoundException("Cliente com ID " + detalhesVendaDTO.getClienteId() + " não encontrado."));
 
-        for (Long produtoId : registrarVendaDTO.getProdutoIds()) {
-            Produto produto = produtoRepository.findById(produtoId)
-                    .orElseThrow(() -> new EntityNotFoundException("Produto com ID " + produtoId + " não encontrado."));
-            produtosParaVender.add(produto);
-            nomesDosProdutos.add(produto.getNome());
-            precoTotal = precoTotal.add(produto.getPrecoVenda());
-        }
-
-        // 2. Criar e preencher a entidade RegistrarVenda
+        // 3. Criar e preencher a entidade RegistrarVenda (o "recibo")
         RegistrarVenda novaVenda = new RegistrarVenda();
-        novaVenda.setNome(String.join(", ", nomesDosProdutos));
-        novaVenda.setNomeCliente(registrarVendaDTO.getNomeCliente());
-        novaVenda.setSituacao(registrarVendaDTO.getSituacao());
-        novaVenda.setFormaPagamento(registrarVendaDTO.getFormaPagamento());
-        novaVenda.setNumeroParcelas(registrarVendaDTO.getNumeroParcelas());
-        novaVenda.setPrecoTotalVenda(precoTotal);
+        novaVenda.setNome(produto.getNome());
+        novaVenda.setCliente(cliente); // <-- CORREÇÃO AQUI: Associa a entidade Cliente completa
+        novaVenda.setSituacao(detalhesVendaDTO.getSituacao());
+        novaVenda.setFormaPagamento(detalhesVendaDTO.getFormaPagamento());
+        novaVenda.setNumeroParcelas(detalhesVendaDTO.getNumeroParcelas());
+        novaVenda.setPrecoTotalVenda(produto.getPrecoVenda());
 
-        // 3. Mover os produtos para a tabela de itens vendidos
-        for (Produto produto : produtosParaVender) {
-            ItemVendido itemVendido = new ItemVendido(produto);
-            itemVendido.setRegistrarVenda(novaVenda);
-            novaVenda.getItens().add(itemVendido);
-            produtoRepository.delete(produto);
-        }
+        // 4. Criar o ItemVendido e ligá-lo ao recibo
+        ItemVendido itemVendido = new ItemVendido(produto);
+        itemVendido.setRegistrarVenda(novaVenda);
+        novaVenda.getItens().add(itemVendido);
 
+        // 5. Salvar o recibo
         RegistrarVenda vendaSalva = registrarVendaRepository.save(novaVenda);
+
+        // 6. Apagar o produto original do stock
+        produtoRepository.delete(produto);
+
         return convertToDto(vendaSalva);
     }
 
@@ -74,7 +69,11 @@ public class RegistrarVendaService {
         RegistrarVendaDTO dto = new RegistrarVendaDTO();
         dto.setId(venda.getId());
         dto.setNome(venda.getNome());
-        dto.setNomeCliente(venda.getNomeCliente());
+        // Preenche os dados do cliente no DTO de resposta
+        if (venda.getCliente() != null) {
+            dto.setClienteId(venda.getCliente().getId());
+            dto.setNomeCliente(venda.getCliente().getNome());
+        }
         dto.setSituacao(venda.getSituacao());
         dto.setFormaPagamento(venda.getFormaPagamento());
         dto.setNumeroParcelas(venda.getNumeroParcelas());

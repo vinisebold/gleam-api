@@ -2,9 +2,11 @@ package com.gleam.backend.service;
 
 import com.gleam.backend.dto.ItemVendidoDTO;
 import com.gleam.backend.dto.RegistrarVendaDTO;
+import com.gleam.backend.model.Cliente; // Importe a entidade Cliente
 import com.gleam.backend.model.ItemVendido;
 import com.gleam.backend.model.Produto;
 import com.gleam.backend.model.RegistrarVenda;
+import com.gleam.backend.repository.ClienteRepository; // Importe o repositório do Cliente
 import com.gleam.backend.repository.ItemVendidoRepository;
 import com.gleam.backend.repository.ProdutoRepository;
 import com.gleam.backend.repository.RegistrarVendaRepository;
@@ -25,13 +27,11 @@ public class ItemVendidoService {
     private final ProdutoRepository produtoRepository;
     private final ItemVendidoRepository itemVendidoRepository;
     private final RegistrarVendaRepository registrarVendaRepository;
+    private final ClienteRepository clienteRepository; // Nova dependência
 
-    /**
-     * Registra a venda de um único produto, usando os detalhes de pagamento fornecidos.
-     */
     @Transactional
     public RegistrarVendaDTO registrarVendaDeProdutoUnico(Long produtoId, RegistrarVendaDTO detalhesVendaDTO) {
-        // 1. Encontrar o produto que será vendido
+        // 1. Encontrar o produto a ser vendido
         Produto produto = produtoRepository.findById(produtoId)
                 .orElseThrow(() -> new EntityNotFoundException("Produto com ID " + produtoId + " não encontrado para venda."));
 
@@ -39,29 +39,31 @@ public class ItemVendidoService {
             throw new IllegalStateException("Este produto não está disponível para venda.");
         }
 
-        // 2. Criar o "Recibo" (RegistrarVenda)
-        RegistrarVenda recibo = new RegistrarVenda();
-        recibo.setNome(produto.getNome()); // O nome do recibo é o nome do produto
-        recibo.setPrecoTotalVenda(produto.getPrecoVenda());
+        // 2. Buscar a entidade Cliente usando o ID fornecido no DTO
+        Cliente cliente = clienteRepository.findById(detalhesVendaDTO.getClienteId())
+                .orElseThrow(() -> new EntityNotFoundException("Cliente com ID " + detalhesVendaDTO.getClienteId() + " não encontrado."));
 
-        // LÓGICA ATUALIZADA: Usa os dados recebidos do DTO
-        recibo.setNomeCliente(detalhesVendaDTO.getNomeCliente());
+        // 3. Criar o "Recibo" (RegistrarVenda)
+        RegistrarVenda recibo = new RegistrarVenda();
+        recibo.setNome(produto.getNome());
+        recibo.setPrecoTotalVenda(produto.getPrecoVenda());
+        recibo.setCliente(cliente); // <-- CORREÇÃO AQUI: Associa a entidade Cliente completa
         recibo.setSituacao(detalhesVendaDTO.getSituacao());
         recibo.setFormaPagamento(detalhesVendaDTO.getFormaPagamento());
         recibo.setNumeroParcelas(detalhesVendaDTO.getNumeroParcelas());
 
-        // 3. Criar o ItemVendido e ligar ao recibo
+        // 4. Criar o ItemVendido e ligar ao recibo
         ItemVendido itemVendido = new ItemVendido(produto);
         itemVendido.setRegistrarVenda(recibo);
         recibo.getItens().add(itemVendido);
 
-        // 4. Salvar o recibo (que salva o item junto)
+        // 5. Salvar o recibo (que salva o item junto)
         RegistrarVenda reciboSalvo = registrarVendaRepository.save(recibo);
 
-        // 5. Apagar o produto original
+        // 6. Apagar o produto original
         produtoRepository.delete(produto);
 
-        // 6. Retornar o DTO do recibo criado
+        // 7. Retornar o DTO do recibo criado
         return convertToDto(reciboSalvo);
     }
 
@@ -69,13 +71,14 @@ public class ItemVendidoService {
         return itemVendidoRepository.findAll(pageable).map(this::convertItemToDto);
     }
 
-    // --- MÉTODOS DE CONVERSÃO (sem alteração) ---
-
     private RegistrarVendaDTO convertToDto(RegistrarVenda venda) {
         RegistrarVendaDTO dto = new RegistrarVendaDTO();
         dto.setId(venda.getId());
         dto.setNome(venda.getNome());
-        dto.setNomeCliente(venda.getNomeCliente());
+        if (venda.getCliente() != null) {
+            dto.setClienteId(venda.getCliente().getId());
+            dto.setNomeCliente(venda.getCliente().getNome());
+        }
         dto.setSituacao(venda.getSituacao());
         dto.setFormaPagamento(venda.getFormaPagamento());
         dto.setNumeroParcelas(venda.getNumeroParcelas());

@@ -13,6 +13,7 @@ import java.util.List;
 @Table(name = "registrar_vendas")
 public class RegistrarVenda {
 
+    // ... (Constantes)
     public static final Integer SITUACAO_PENDENTE = 0;
     public static final Integer SITUACAO_PAGO = 1;
     public static final Integer PAGAMENTO_PIX = 0;
@@ -27,9 +28,12 @@ public class RegistrarVenda {
     @Column(nullable = false)
     private String nome;
 
-    @Column(name = "nome_cliente")
-    private String nomeCliente;
+    // A RELAÇÃO CORRETA COM O CLIENTE
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cliente_id", nullable = false)
+    private Cliente cliente;
 
+    // ... (outros campos como situacao, formaPagamento, etc.)
     @Column(nullable = false)
     private Integer situacao;
 
