@@ -5,25 +5,60 @@ import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import java.time.LocalDateTime;
+import java.util.List;
 
+/**
+ * Entidade que representa um Cliente no sistema.
+ * Armazena informações cadastrais básicas para identificação e contato.
+ */
 @Data
 @Entity
 @Table(name = "clientes")
 public class Cliente {
 
+    /**
+     * Identificador único do cliente, gerado automaticamente pelo banco de dados.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    /**
+     * Nome completo do cliente.
+     */
     private String nome;
+
+    /**
+     * Número de telefone de contato do cliente.
+     */
     private String telefone;
+
+    /**
+     * Endereço de e-mail do cliente.
+     */
     private String email;
 
+    // --- Campos de Auditoria ---
+
+    /**
+     * Data e hora exatas em que o cliente foi registado no sistema.
+     * O valor é gerado automaticamente pelo Hibernate na primeira vez que o registo é salvo.
+     */
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
     private LocalDateTime dataCriacao;
 
+    /**
+     * Data e hora da última atualização dos dados do cliente.
+     * O valor é atualizado automaticamente pelo Hibernate sempre que o registo é modificado.
+     */
     @UpdateTimestamp
     @Column(nullable = false)
     private LocalDateTime dataAtualizacao;
+
+    // --- Relacionamentos (Opcional Futuro) ---
+    // No futuro, se quisermos ver facilmente todas as vendas de um cliente,
+    // poderíamos adicionar o seguinte relacionamento:
+    // @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
+    // private List<RegistrarVenda> vendas;
 }

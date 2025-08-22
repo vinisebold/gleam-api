@@ -1,84 +1,82 @@
 package com.gleam.backend.controller;
 
 import com.gleam.backend.dto.ClienteDTO;
-import com.gleam.backend.model.Cliente;
 import com.gleam.backend.service.ClienteService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.util.List;
+import java.net.URI;
 
+/**
+ * Controller REST para gerir a entidade Cliente.
+ * Expõe os endpoints da API para todas as operações de CRUD relacionadas a clientes.
+ */
 @RestController
 @RequestMapping("/api/clientes")
+@RequiredArgsConstructor
 public class ClienteController {
 
-    @Autowired
-    private ClienteService clienteService;
+    private final ClienteService clienteService;
 
     /**
-     * Endpoint para CRIAR (cadastrar) um novo cliente.
-     * Chama o service, que irá limpar o cache.
+     * Endpoint para criar um novo cliente.
+     * @param dto O corpo da requisição com os dados do cliente.
+     * @return Resposta 201 Created com o DTO do novo cliente no corpo e a URI no cabeçalho Location.
      */
     @PostMapping
-    public ResponseEntity<?> createCliente(@RequestBody ClienteDTO dto) {
-        try {
-            Cliente novoCliente = clienteService.save(dto);
-            return ResponseEntity.ok(novoCliente);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public ResponseEntity<ClienteDTO> createCliente(@RequestBody ClienteDTO dto) {
+        ClienteDTO novoCliente = clienteService.save(dto);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+                .buildAndExpand(novoCliente.getId()).toUri();
+        return ResponseEntity.created(uri).body(novoCliente);
     }
 
     /**
-     * Endpoint para LER (buscar) todos os clientes cadastrados.
-     * Chama o service, que irá usar o cache.
+     * Endpoint para listar todos os clientes de forma paginada.
+     * @param pageable Parâmetros de paginação (ex: ?page=0&size=10&sort=nome,asc).
+     * @return Uma página (Page) de ClienteDTOs.
      */
     @GetMapping
-    public ResponseEntity<List<Cliente>> getAllClientes() {
-        List<Cliente> clientes = clienteService.findAll();
+    public ResponseEntity<Page<ClienteDTO>> getAllClientes(Pageable pageable) {
+        Page<ClienteDTO> clientes = clienteService.findAll(pageable);
         return ResponseEntity.ok(clientes);
     }
 
     /**
-     * Endpoint para LER (buscar) um cliente específico pelo seu ID.
-     * Chama o service, que irá usar o cache.
+     * Endpoint para buscar um cliente específico pelo seu ID.
+     * @param id O ID do cliente.
+     * @return O ClienteDTO correspondente.
      */
     @GetMapping("/{id}")
-    public ResponseEntity<?> getClienteById(@PathVariable Long id) {
-        try {
-            Cliente cliente = clienteService.findById(id);
-            return ResponseEntity.ok(cliente);
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<ClienteDTO> getClienteById(@PathVariable Long id) {
+        ClienteDTO cliente = clienteService.findById(id);
+        return ResponseEntity.ok(cliente);
     }
 
     /**
-     * Endpoint para ATUALIZAR (editar) um cliente existente.
-     * Chama o service, que irá limpar o cache.
+     * Endpoint para atualizar um cliente existente.
+     * @param id O ID do cliente a ser atualizado.
+     * @param dto O corpo da requisição com os novos dados.
+     * @return O ClienteDTO atualizado.
      */
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateCliente(@PathVariable Long id, @RequestBody ClienteDTO dto) {
-        try {
-            Cliente clienteAtualizado = clienteService.update(id, dto);
-            return ResponseEntity.ok(clienteAtualizado);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public ResponseEntity<ClienteDTO> updateCliente(@PathVariable Long id, @RequestBody ClienteDTO dto) {
+        ClienteDTO clienteAtualizado = clienteService.update(id, dto);
+        return ResponseEntity.ok(clienteAtualizado);
     }
 
     /**
-     * Endpoint para APAGAR um cliente.
-     * Chama o service, que irá limpar o cache.
+     * Endpoint para apagar um cliente.
+     * @param id O ID do cliente a ser apagado.
+     * @return Resposta 204 No Content, indicando sucesso sem corpo de resposta.
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCliente(@PathVariable Long id) {
-        try {
-            clienteService.delete(id);
-            return ResponseEntity.noContent().build();
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
-        }
+        clienteService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }

@@ -4,34 +4,106 @@ import com.gleam.backend.dto.FornecedorDTO;
 import com.gleam.backend.model.Fornecedor;
 import com.gleam.backend.repository.FornecedorRepository;
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
+/**
+ * Serviço que encapsula a lógica de negócio para a entidade Fornecedor.
+ * Responsável por todas as operações de CRUD, validações e conversões de dados.
+ */
 @Service
+@RequiredArgsConstructor
 public class FornecedorService {
 
-    @Autowired
-    private FornecedorRepository fornecedorRepository;
+    private final FornecedorRepository fornecedorRepository;
 
     /**
-     * Busca todos os fornecedores.
-     * Na primeira chamada, busca no banco e guarda o resultado no cache "fornecedores".
-     * Nas chamadas seguintes, retorna o resultado diretamente do cache.
+     * Busca uma lista paginada de todos os fornecedores.
+     * @param pageable Objeto com informações de paginação.
+     * @return Uma página de FornecedorDTOs.
      */
-    @Cacheable("fornecedores")
-    public List<FornecedorDTO> findAll() {
-        System.out.println("A BUSCAR FORNECEDORES NO BANCO DE DADOS E CONVERTENDO PARA DTO...");
-
-        return fornecedorRepository.findAll().stream().map(this::convertToDto).collect(Collectors.toList());
+    public Page<FornecedorDTO> findAll(Pageable pageable) {
+        return fornecedorRepository.findAll(pageable).map(this::convertToDto);
     }
 
     /**
-     * ---- MÉTODO PRIVADO P CONVERTER PARA DTO ----
+     * Busca um único fornecedor pelo seu ID.
+     * @param id O ID do fornecedor a ser buscado.
+     * @return O FornecedorDTO correspondente.
+     * @throws EntityNotFoundException se nenhum fornecedor for encontrado com o ID fornecido.
+     */
+    public FornecedorDTO findById(Long id) {
+        Fornecedor fornecedor = fornecedorRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Fornecedor não encontrado com o ID: " + id));
+        return convertToDto(fornecedor);
+    }
+
+    /**
+     * Cria e salva um novo fornecedor no banco de dados.
+     * @param dto O DTO com os dados do novo fornecedor.
+     * @return O FornecedorDTO do fornecedor recém-criado.
+     */
+    public FornecedorDTO save(FornecedorDTO dto) {
+        Fornecedor fornecedor = new Fornecedor();
+        mapDtoToEntity(dto, fornecedor); // Reutiliza a lógica de mapeamento
+        Fornecedor fornecedorSalvo = fornecedorRepository.save(fornecedor);
+        return convertToDto(fornecedorSalvo);
+    }
+
+    /**
+     * Atualiza um fornecedor existente.
+     * @param id O ID do fornecedor a ser atualizado.
+     * @param dto O DTO com os novos dados para o fornecedor.
+     * @return O FornecedorDTO do fornecedor atualizado.
+     */
+    public FornecedorDTO update(Long id, FornecedorDTO dto) {
+        Fornecedor fornecedorExistente = fornecedorRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Fornecedor não encontrado com o ID: " + id));
+
+        mapDtoToEntity(dto, fornecedorExistente); // Reutiliza a lógica de mapeamento
+        Fornecedor fornecedorSalvo = fornecedorRepository.save(fornecedorExistente);
+        return convertToDto(fornecedorSalvo);
+    }
+
+    /**
+     * Apaga um fornecedor do banco de dados.
+     * @param id O ID do fornecedor a ser apagado.
+     */
+    public void delete(Long id) {
+        if (!fornecedorRepository.existsById(id)) {
+            throw new EntityNotFoundException("Fornecedor não encontrado com o ID: " + id);
+        }
+        fornecedorRepository.deleteById(id);
+    }
+
+    // --- Métodos Privados de Conversão ---
+
+    /**
+     * Mapeia os dados de um FornecedorDTO para uma entidade Fornecedor.
+     * @param dto O DTO de origem.
+     * @param fornecedor A entidade de destino.
+     */
+    private void mapDtoToEntity(FornecedorDTO dto, Fornecedor fornecedor) {
+        fornecedor.setNome(dto.getNome());
+        fornecedor.setCnpj(dto.getCnpj());
+        fornecedor.setTelefone(dto.getTelefone());
+        fornecedor.setDescricao(dto.getDescricao());
+        fornecedor.setCodigoAnel(dto.getCodigoAnel());
+        fornecedor.setCodigoBracelete(dto.getCodigoBracelete());
+        fornecedor.setCodigoColar(dto.getCodigoColar());
+        fornecedor.setCodigoBrinco(dto.getCodigoBrinco());
+        fornecedor.setCodigoPulseira(dto.getCodigoPulseira());
+        fornecedor.setCodigoPingente(dto.getCodigoPingente());
+        fornecedor.setCodigoConjunto(dto.getCodigoConjunto());
+        fornecedor.setCodigoBerloque(dto.getCodigoBerloque());
+        fornecedor.setCodigoPiercing(dto.getCodigoPiercing());
+    }
+
+    /**
      * Converte uma entidade Fornecedor para um FornecedorDTO.
      * @param fornecedor A entidade a ser convertida.
      * @return O DTO correspondente.
@@ -55,74 +127,5 @@ public class FornecedorService {
         dto.setCodigoBerloque(fornecedor.getCodigoBerloque());
         dto.setCodigoPiercing(fornecedor.getCodigoPiercing());
         return dto;
-    }
-
-    /**
-     * Cria e salva um novo fornecedor, limpando o cache de fornecedores.
-     * @param dto Os dados do novo fornecedor.
-     * @return A entidade Fornecedor salva.
-     */
-    @CacheEvict(value = "fornecedores", allEntries = true)
-    public Fornecedor save(FornecedorDTO dto) {
-        System.out.println("A SALVAR NOVO FORNECEDOR E A LIMPAR O CACHE...");
-        Fornecedor fornecedor = new Fornecedor();
-        fornecedor.setNome(dto.getNome());
-        fornecedor.setCnpj(dto.getCnpj());
-        fornecedor.setTelefone(dto.getTelefone());
-        fornecedor.setDescricao(dto.getDescricao());
-        fornecedor.setCodigoAnel(dto.getCodigoAnel());
-        fornecedor.setCodigoBracelete(dto.getCodigoBracelete());
-        fornecedor.setCodigoColar(dto.getCodigoColar());
-        fornecedor.setCodigoBrinco(dto.getCodigoBrinco());
-        fornecedor.setCodigoPulseira(dto.getCodigoPulseira());
-        fornecedor.setCodigoPingente(dto.getCodigoPingente());
-        fornecedor.setCodigoConjunto(dto.getCodigoConjunto());
-        fornecedor.setCodigoBerloque(dto.getCodigoBerloque());
-        fornecedor.setCodigoPiercing(dto.getCodigoPiercing());
-
-        return fornecedorRepository.save(fornecedor);
-    }
-
-    /**
-     * Atualiza um fornecedor existente e limpa o cache de fornecedores.
-     * @param id O ID do fornecedor a ser atualizado.
-     * @param dto Os novos dados para o fornecedor.
-     * @return A entidade Fornecedor atualizada.
-     */
-    @CacheEvict(value = "fornecedores", allEntries = true)
-    public Fornecedor update(Long id, FornecedorDTO dto) {
-        System.out.println("A ATUALIZAR FORNECEDOR E A LIMPAR O CACHE...");
-        Fornecedor fornecedorExistente = fornecedorRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Fornecedor não encontrado com o ID: " + id));
-
-        // Atualiza todos os campos
-        fornecedorExistente.setNome(dto.getNome());
-        fornecedorExistente.setCnpj(dto.getCnpj());
-        fornecedorExistente.setTelefone(dto.getTelefone());
-        fornecedorExistente.setDescricao(dto.getDescricao());
-        fornecedorExistente.setCodigoAnel(dto.getCodigoAnel());
-        fornecedorExistente.setCodigoBracelete(dto.getCodigoBracelete());
-        fornecedorExistente.setCodigoColar(dto.getCodigoColar());
-        fornecedorExistente.setCodigoBrinco(dto.getCodigoBrinco());
-        fornecedorExistente.setCodigoPulseira(dto.getCodigoPulseira());
-        fornecedorExistente.setCodigoPingente(dto.getCodigoPingente());
-        fornecedorExistente.setCodigoConjunto(dto.getCodigoConjunto());
-        fornecedorExistente.setCodigoBerloque(dto.getCodigoBerloque());
-        fornecedorExistente.setCodigoPiercing(dto.getCodigoPiercing());
-
-        return fornecedorRepository.save(fornecedorExistente);
-    }
-
-    /**
-     * Apaga um fornecedor e limpa o cache de fornecedores.
-     * @param id O ID do fornecedor a ser apagado.
-     */
-    @CacheEvict(value = "fornecedores", allEntries = true)
-    public void delete(Long id) {
-        System.out.println("A APAGAR FORNECEDOR E A LIMPAR O CACHE...");
-        if (!fornecedorRepository.existsById(id)) {
-            throw new EntityNotFoundException("Fornecedor não encontrado com o ID: " + id);
-        }
-        fornecedorRepository.deleteById(id);
     }
 }

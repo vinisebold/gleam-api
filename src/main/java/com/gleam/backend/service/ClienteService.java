@@ -4,61 +4,73 @@ import com.gleam.backend.dto.ClienteDTO;
 import com.gleam.backend.model.Cliente;
 import com.gleam.backend.repository.ClienteRepository;
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
+/**
+ * Serviço que encapsula a lógica de negócio para a entidade Cliente.
+ * Responsável por todas as operações de CRUD, validações e conversões de dados.
+ */
 @Service
+@RequiredArgsConstructor
 public class ClienteService {
 
-    @Autowired
-    private ClienteRepository clienteRepository;
+    private final ClienteRepository clienteRepository;
 
     /**
-     * Cria e salva um novo cliente, limpando o cache de clientes.
-     * @param dto Os dados do novo cliente.
-     * @return A entidade Cliente salva.
+     * Busca uma lista paginada de todos os clientes.
+     * @param pageable Objeto com informações de paginação.
+     * @return Uma página de ClienteDTOs.
      */
-    @CacheEvict(value = "clientes", allEntries = true)
-    public Cliente save(ClienteDTO dto) {
-        if (dto.getNome() == null || dto.getNome().trim().isEmpty()) {
-            throw new IllegalArgumentException("O nome do cliente é obrigatório.");
-        }
-        Cliente cliente = new Cliente();
-        cliente.setNome(dto.getNome());
-
-        cliente.setTelefone(dto.getTelefone());
-
-        return clienteRepository.save(cliente);
+    public Page<ClienteDTO> findAll(Pageable pageable) {
+        return clienteRepository.findAll(pageable).map(this::convertToDto);
     }
 
     /**
-     * Atualiza um cliente existente e limpa o cache de clientes.
-     * @param id  O ID do cliente a ser atualizado.
-     * @param dto Os novos dados para o cliente.
-     * @return A entidade Cliente atualizada.
+     * Busca um único cliente pelo seu ID.
+     * @param id O ID do cliente a ser buscado.
+     * @return O ClienteDTO correspondente.
+     * @throws EntityNotFoundException se nenhum cliente for encontrado com o ID fornecido.
      */
-    @CacheEvict(value = "clientes", allEntries = true)
-    public Cliente update(Long id, ClienteDTO dto) {
+    public ClienteDTO findById(Long id) {
+        Cliente cliente = clienteRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Cliente não encontrado com o ID: " + id));
+        return convertToDto(cliente);
+    }
+
+    /**
+     * Cria e salva um novo cliente no banco de dados.
+     * @param dto O DTO com os dados do novo cliente.
+     * @return O ClienteDTO do cliente recém-criado.
+     */
+    public ClienteDTO save(ClienteDTO dto) {
+        Cliente cliente = new Cliente();
+        mapDtoToEntity(dto, cliente); // Reutiliza a lógica de mapeamento
+        Cliente clienteSalvo = clienteRepository.save(cliente);
+        return convertToDto(clienteSalvo);
+    }
+
+    /**
+     * Atualiza um cliente existente.
+     * @param id O ID do cliente a ser atualizado.
+     * @param dto O DTO com os novos dados para o cliente.
+     * @return O ClienteDTO do cliente atualizado.
+     */
+    public ClienteDTO update(Long id, ClienteDTO dto) {
         Cliente clienteExistente = clienteRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Cliente não encontrado com o ID: " + id));
 
-        clienteExistente.setNome(dto.getNome());
-       
-        clienteExistente.setTelefone(dto.getTelefone());
-
-
-        return clienteRepository.save(clienteExistente);
+        mapDtoToEntity(dto, clienteExistente); // Reutiliza a lógica de mapeamento
+        Cliente clienteSalvo = clienteRepository.save(clienteExistente);
+        return convertToDto(clienteSalvo);
     }
 
     /**
-     * Apaga um cliente e limpa o cache de clientes.
+     * Apaga um cliente do banco de dados.
      * @param id O ID do cliente a ser apagado.
      */
-    @CacheEvict(value = "clientes", allEntries = true)
     public void delete(Long id) {
         if (!clienteRepository.existsById(id)) {
             throw new EntityNotFoundException("Cliente não encontrado com o ID: " + id);
@@ -66,26 +78,32 @@ public class ClienteService {
         clienteRepository.deleteById(id);
     }
 
+    // --- Métodos Privados de Conversão ---
+
     /**
-     * Retorna uma lista de todos os clientes, usando o cache "clientes".
-     * @return Uma lista de entidades Cliente.
+     * Mapeia os dados de um ClienteDTO para uma entidade Cliente.
+     * @param dto O DTO de origem.
+     * @param cliente A entidade de destino.
      */
-    @Cacheable("clientes")
-    public List<Cliente> findAll() {
-        System.out.println("A BUSCAR CLIENTES NO BANCO DE DADOS...");
-        return clienteRepository.findAll();
+    private void mapDtoToEntity(ClienteDTO dto, Cliente cliente) {
+        cliente.setNome(dto.getNome());
+        cliente.setTelefone(dto.getTelefone());
+        cliente.setEmail(dto.getEmail()); // Campo que faltava ser mapeado
     }
 
     /**
-     * Busca um único cliente pelo seu ID, usando o cache "clientes".
-     * A chave do cache será o ID do cliente.
-     * @param id O ID do cliente a ser encontrado.
-     * @return A entidade Cliente encontrada.
+     * Converte uma entidade Cliente para um ClienteDTO.
+     * @param cliente A entidade a ser convertida.
+     * @return O DTO correspondente.
      */
-    @Cacheable(value = "clientes", key = "#id")
-    public Cliente findById(Long id) {
-        System.out.println("A BUSCAR CLIENTE COM ID " + id + " NO BANCO DE DADOS...");
-        return clienteRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Cliente não encontrado com o ID: " + id));
+    private ClienteDTO convertToDto(Cliente cliente) {
+        ClienteDTO dto = new ClienteDTO();
+        dto.setId(cliente.getId());
+        dto.setNome(cliente.getNome());
+        dto.setTelefone(cliente.getTelefone());
+        dto.setEmail(cliente.getEmail());
+        dto.setDataCriacao(cliente.getDataCriacao());
+        dto.setDataAtualizacao(cliente.getDataAtualizacao());
+        return dto;
     }
 }
