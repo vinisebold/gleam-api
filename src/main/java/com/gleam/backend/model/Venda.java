@@ -34,7 +34,7 @@ public class Venda {
 
     private BigDecimal precoVenda;
 
-    // O lucro é calculado e armazenado para otimizar relatórios financeiros.
+    // Lucro é calculado e armazenado p otimizar relatórios financeiros.
     private BigDecimal lucro;
 
     @Enumerated(EnumType.STRING)
