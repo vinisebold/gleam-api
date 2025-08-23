@@ -31,7 +31,7 @@ public class ClienteController {
     public ResponseEntity<ClienteDTO> createCliente(@RequestBody ClienteDTO dto) {
         ClienteDTO novoCliente = clienteService.save(dto);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-                .buildAndExpand(novoCliente.getId()).toUri();
+                .buildAndExpand(novoCliente.id()).toUri();
         return ResponseEntity.created(uri).body(novoCliente);
     }
 

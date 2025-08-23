@@ -31,7 +31,7 @@ public class FornecedorController {
     public ResponseEntity<FornecedorDTO> createFornecedor(@RequestBody FornecedorDTO dto) {
         FornecedorDTO novoFornecedor = fornecedorService.save(dto);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-                .buildAndExpand(novoFornecedor.getId()).toUri();
+                .buildAndExpand(novoFornecedor.id()).toUri();
         return ResponseEntity.created(uri).body(novoFornecedor);
     }
 
