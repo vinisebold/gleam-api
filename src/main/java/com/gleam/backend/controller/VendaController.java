@@ -4,13 +4,13 @@ import com.gleam.backend.dto.RegistrarVendaRequestDto;
 import com.gleam.backend.dto.VendaResponseDto;
 import com.gleam.backend.model.StatusVenda;
 import com.gleam.backend.service.VendaService;
+
 import lombok.RequiredArgsConstructor;
-import org.hibernate.query.Page;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.awt.print.Pageable;
 
 @RestController
 @RequestMapping("/api/vendas")
@@ -46,5 +46,15 @@ public class VendaController {
         return ResponseEntity.ok(vendas);
     }
 
+    @PostMapping("/{id}/pagar-parcela")
+    public ResponseEntity<VendaResponseDto> pagarParcela(@PathVariable("id") Long vendaId) {
+        VendaResponseDto vendaAtualizada = vendaService.pagarProximaParcela(vendaId);
+        return ResponseEntity.ok(vendaAtualizada);
+    }
 
+    @PostMapping("/{id}/cancelar")
+    public ResponseEntity<VendaResponseDto> cancelarVenda(@PathVariable("id") Long vendaId) {
+        VendaResponseDto vendaCancelada = vendaService.cancelarVenda(vendaId);
+        return ResponseEntity.ok(vendaCancelada);
+    }
 }

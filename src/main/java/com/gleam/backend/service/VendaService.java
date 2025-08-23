@@ -6,10 +6,13 @@ import com.gleam.backend.model.*;
 import com.gleam.backend.repository.ClienteRepository;
 import com.gleam.backend.repository.ProdutoRepository;
 import com.gleam.backend.repository.VendaRepository;
+
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -21,6 +24,18 @@ public class VendaService {
     private final VendaRepository vendaRepository;
     private final ProdutoRepository produtoRepository;
     private final ClienteRepository clienteRepository;
+
+    @Transactional(readOnly = true)
+    public Page<VendaResponseDto> findAll(Pageable pageable, StatusVenda status) {
+        Page<Venda> vendas;
+        if (status != null) {
+            // Futuramente, criar este método no Repository para otimizar
+            vendas = vendaRepository.findByStatus(status, pageable);
+        } else {
+            vendas = vendaRepository.findAll(pageable);
+        }
+        return vendas.map(VendaResponseDto::new);
+    }
 
     @Transactional
     public VendaResponseDto registrarVenda(RegistrarVendaRequestDto dto) {
@@ -39,7 +54,6 @@ public class VendaService {
         // 3. Atualizar o Produto
         produto.setStatus(StatusProduto.VENDIDO);
         produto.setDataVenda(LocalDateTime.now());
-        // Não precisamos chamar save() do produto ainda, o @Transactional cuidará disso.
 
         // 4. Criar e preencher a nova Venda
         Venda novaVenda = getVenda(dto, produto, cliente);
@@ -49,6 +63,48 @@ public class VendaService {
 
         // 6. Retornar o DTO de resposta
         return new VendaResponseDto(vendaSalva);
+    }
+
+    @Transactional
+    public VendaResponseDto pagarProximaParcela(Long vendaId) {
+        Venda venda = vendaRepository.findById(vendaId)
+                .orElseThrow(() -> new EntityNotFoundException("Venda com ID " + vendaId + " não encontrada."));
+
+        if (venda.getStatus() == StatusVenda.PAGO) {
+            throw new IllegalStateException("Esta venda já está totalmente paga.");
+        }
+
+        // Incrementa o número de parcelas pagas
+        venda.setParcelasPagas(venda.getParcelasPagas() + 1);
+
+        // Verifica se a venda foi totalmente paga
+        if (venda.getParcelasPagas() >= venda.getTotalParcelas()) {
+            venda.setStatus(StatusVenda.PAGO);
+        }
+
+        Venda vendaAtualizada = vendaRepository.save(venda);
+        return new VendaResponseDto(vendaAtualizada);
+    }
+
+    @Transactional
+    public VendaResponseDto cancelarVenda(Long vendaId) {
+        Venda venda = vendaRepository.findById(vendaId)
+                .orElseThrow(() -> new EntityNotFoundException("Venda com ID " + vendaId + " não encontrada."));
+
+        if (venda.getStatus() == StatusVenda.CANCELADO) {
+            throw new IllegalStateException("Esta venda já está cancelada.");
+        }
+
+        // Retorna o produto ao estoque
+        Produto produto = venda.getProduto();
+        produto.setStatus(StatusProduto.EM_ESTOQUE);
+        produto.setDataVenda(null); // Limpa a data da venda
+
+        // Atualiza o status da venda
+        venda.setStatus(StatusVenda.CANCELADO);
+
+        Venda vendaCancelada = vendaRepository.save(venda);
+        return new VendaResponseDto(vendaCancelada);
     }
 
     private static Venda getVenda(RegistrarVendaRequestDto dto, Produto produto, Cliente cliente) {
