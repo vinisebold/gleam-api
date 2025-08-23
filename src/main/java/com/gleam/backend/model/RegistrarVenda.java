@@ -89,8 +89,8 @@ public class RegistrarVenda {
      * Lista de todos os itens individuais que compõem esta venda.
      * `cascade = CascadeType.ALL` garante que os ItensVendidos sejam salvos/apagados junto com a Venda.
      */
-    @OneToMany(mappedBy = "registrarVenda", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ItemVendido> itens = new ArrayList<>();
+    @OneToOne(mappedBy = "registrarVenda", cascade = CascadeType.ALL, orphanRemoval = true)
+    private ItemVendido item;
 
     // --- Campos de Auditoria ---
 

@@ -55,7 +55,7 @@ public class ItemVendidoService {
         // 4. Criar o ItemVendido e ligar ao recibo
         ItemVendido itemVendido = new ItemVendido(produto);
         itemVendido.setRegistrarVenda(recibo);
-        recibo.getItens().add(itemVendido);
+        recibo.setItem(itemVendido);;
 
         // 5. Salvar o recibo (que salva o item junto)
         RegistrarVenda reciboSalvo = registrarVendaRepository.save(recibo);
@@ -85,11 +85,9 @@ public class ItemVendidoService {
         dto.setPrecoTotalVenda(venda.getPrecoTotalVenda());
         dto.setDataCriacao(venda.getDataCriacao());
 
-        List<ItemVendidoDTO> itemDTOs = venda.getItens().stream()
-                .map(this::convertItemToDto)
-                .collect(Collectors.toList());
-
-        dto.setItens(itemDTOs);
+        if (venda.getItem() != null) {
+            dto.setItem(convertItemToDto(venda.getItem()));
+        }
         return dto;
     }
 

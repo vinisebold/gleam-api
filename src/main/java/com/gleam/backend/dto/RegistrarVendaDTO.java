@@ -27,7 +27,7 @@ public class RegistrarVendaDTO {
      * O item detalhado que foi vendido nesta transação.
      * Alterado de uma lista para um único objeto para refletir a regra de negócio.
      */
-    private ItemVendidoDTO item; // <-- ALTERADO DE List<ItemVendidoDTO> PARA ItemVendidoDTO
+    private ItemVendidoDTO item;
 
     private LocalDateTime dataCriacao;
 }
