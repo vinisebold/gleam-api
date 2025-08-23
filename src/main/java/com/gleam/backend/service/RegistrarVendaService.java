@@ -56,7 +56,7 @@ public class RegistrarVendaService {
         // 4. Criar o ItemVendido e associá-lo ao recibo
         ItemVendido itemVendido = new ItemVendido(produto);
         itemVendido.setRegistrarVenda(novaVenda);
-        novaVenda.getItens().add(itemVendido);
+        novaVenda.setItem(itemVendido);
 
         // 5. Salvar e apagar
         RegistrarVenda vendaSalva = registrarVendaRepository.save(novaVenda);
@@ -100,9 +100,8 @@ public class RegistrarVendaService {
 
         // --- LÓGICA DE CONVERSÃO ATUALIZADA ---
         // Se a lista de itens não estiver vazia, pegamos o primeiro (e único) item.
-        if (venda.getItens() != null && !venda.getItens().isEmpty()) {
-            ItemVendido primeiroItem = venda.getItens().get(0);
-            dto.setItem(convertItemToDto(primeiroItem));
+        if (venda.getItem() != null) {
+            dto.setItem(convertItemToDto(venda.getItem()));
         }
 
         return dto;
