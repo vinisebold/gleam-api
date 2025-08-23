@@ -34,15 +34,16 @@ public class Cliente {
     private String telefone;
 
     /**
-     * Endereço de e-mail do cliente.
+     * CPF do cliente. Opcional.
      */
-    private String email;
+    @Column(nullable = true, length = 14)
+    private String cpf;
 
     // --- Campos de Auditoria ---
 
     /**
-     * Data e hora exatas em que o cliente foi registado no sistema.
-     * O valor é gerado automaticamente pelo Hibernate na primeira vez que o registo é salvo.
+     * Data e hora exatas em que o cliente foi registrado no sistema.
+     * O valor é gerado automaticamente pelo Hibernate na primeira vez que o registro é salvo.
      */
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
@@ -50,7 +51,7 @@ public class Cliente {
 
     /**
      * Data e hora da última atualização dos dados do cliente.
-     * O valor é atualizado automaticamente pelo Hibernate sempre que o registo é modificado.
+     * O valor é atualizado automaticamente pelo Hibernate sempre que o registro é modificado.
      */
     @UpdateTimestamp
     @Column(nullable = false)

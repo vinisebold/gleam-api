@@ -87,10 +87,15 @@ public class ClienteService {
         clienteRepository.deleteById(id);
     }
 
-
+    /**
+     * Realiza o mapeamento dos dados do DTO para a entidade Cliente.
+     *
+     * @param dto     O DTO com os dados de entrada.
+     * @param cliente A entidade Cliente a ser atualizada.
+     */
     private void mapDtoToEntity(ClienteDTO dto, Cliente cliente) {
         cliente.setNome(dto.nome());
         cliente.setTelefone(dto.telefone());
-        cliente.setEmail(dto.email());
+        cliente.setCpf(dto.cpf());
     }
 }

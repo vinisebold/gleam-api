@@ -1,7 +1,6 @@
 package com.gleam.backend.dto;
 
 import com.gleam.backend.model.Cliente;
-
 import java.time.LocalDateTime;
 
 /**
@@ -11,7 +10,7 @@ public record ClienteDTO(
         Long id,
         String nome,
         String telefone,
-        String email,
+        String cpf,
         LocalDateTime dataCriacao,
         LocalDateTime dataAtualizacao
 ) {
@@ -23,7 +22,7 @@ public record ClienteDTO(
                 cliente.getId(),
                 cliente.getNome(),
                 cliente.getTelefone(),
-                cliente.getEmail(),
+                cliente.getCpf(),
                 cliente.getDataCriacao(),
                 cliente.getDataAtualizacao()
         );
