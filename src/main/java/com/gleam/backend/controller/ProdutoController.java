@@ -1,6 +1,7 @@
 package com.gleam.backend.controller;
 
 import com.gleam.backend.dto.ProdutoDTO;
+import com.gleam.backend.model.StatusProduto;
 import com.gleam.backend.service.ProdutoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -18,30 +19,22 @@ public class ProdutoController {
 
     private final ProdutoService produtoService;
 
+    @GetMapping
+    public ResponseEntity<Page<ProdutoDTO>> listarProdutos(
+            @RequestParam(required = false) Long fornecedorId,
+            @RequestParam(required = false) StatusProduto status,
+            Pageable pageable) {
+
+        Page<ProdutoDTO> produtos = produtoService.listarProdutosComFiltros(fornecedorId, status, pageable);
+        return ResponseEntity.ok(produtos);
+    }
+
     @PostMapping
     public ResponseEntity<ProdutoDTO> createProduto(@RequestBody ProdutoDTO produtoDTO) {
         ProdutoDTO novoProduto = produtoService.save(produtoDTO);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(novoProduto.id()).toUri();
         return ResponseEntity.created(uri).body(novoProduto);
-    }
-
-    @GetMapping
-    public ResponseEntity<Page<ProdutoDTO>> getAllProdutosPaginado(Pageable pageable) {
-        Page<ProdutoDTO> produtos = produtoService.findAll(pageable);
-        return ResponseEntity.ok(produtos);
-    }
-
-    @GetMapping("/disponiveis")
-    public ResponseEntity<Page<ProdutoDTO>> getAllProdutosDisponiveis(Pageable pageable) {
-        Page<ProdutoDTO> produtos = produtoService.findAllDisponiveis(pageable);
-        return ResponseEntity.ok(produtos);
-    }
-
-    @GetMapping("/fornecedor/{fornecedorId}")
-    public ResponseEntity<Page<ProdutoDTO>> getProdutosByFornecedor(@PathVariable Long fornecedorId, Pageable pageable) {
-        Page<ProdutoDTO> produtos = produtoService.findByFornecedor(fornecedorId, pageable);
-        return ResponseEntity.ok(produtos);
     }
 
     @GetMapping("/{id}")

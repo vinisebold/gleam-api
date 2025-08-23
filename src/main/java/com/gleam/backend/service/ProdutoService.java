@@ -19,22 +19,27 @@ public class ProdutoService {
     private final ProdutoRepository produtoRepository;
     private final FornecedorRepository fornecedorRepository;
 
-    public Page<ProdutoDTO> findAll(Pageable pageable) {
-        return produtoRepository.findAll(pageable).map(ProdutoDTO::new);
-    }
+    public Page<ProdutoDTO> listarProdutosComFiltros(Long fornecedorId, StatusProduto status, Pageable pageable) {
+        Page<Produto> produtos;
 
-    public Page<ProdutoDTO> findAllDisponiveis(Pageable pageable) {
-        return produtoRepository.findByStatus(StatusProduto.EM_ESTOQUE, pageable).map(ProdutoDTO::new);
+        if (fornecedorId != null && status != null) {
+            produtos = produtoRepository.findByFornecedorIdAndStatus(fornecedorId, status, pageable);
+        } else if (fornecedorId != null) {
+            produtos = produtoRepository.findByFornecedorId(fornecedorId, pageable);
+        } else if (status != null) {
+            produtos = produtoRepository.findByStatus(status, pageable);
+        } else {
+            // Se nenhum filtro for fornecido, lista todos os produtos
+            produtos = produtoRepository.findAll(pageable);
+        }
+
+        return produtos.map(ProdutoDTO::new);
     }
 
     public ProdutoDTO findById(Long id) {
         return produtoRepository.findById(id)
                 .map(ProdutoDTO::new)
                 .orElseThrow(() -> new EntityNotFoundException("Produto não encontrado com o ID: " + id));
-    }
-
-    public Page<ProdutoDTO> findByFornecedor(Long fornecedorId, Pageable pageable) {
-        return produtoRepository.findByFornecedorId(fornecedorId, pageable).map(ProdutoDTO::new);
     }
 
     public long countDisponiveis() {
