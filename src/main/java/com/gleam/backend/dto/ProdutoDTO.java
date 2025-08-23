@@ -36,7 +36,7 @@ public record ProdutoDTO(
                 produto.getCategoria(),
                 produto.getAcabamento(),
                 produto.getIdReferencia(),
-                produto.getFornecedor() != null ? produto.getFornecedor().getId() : null,
+                produto.getFornecedor().getId(),
                 produto.getStatus(),
                 produto.getDataCriacao(),
                 produto.getDataAtualizacao()

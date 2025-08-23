@@ -36,8 +36,8 @@ public class Produto {
     @Enumerated(EnumType.STRING)
     private StatusProduto status;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_fornecedor")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "id_fornecedor", nullable = false)
     private Fornecedor fornecedor;
 
     @CreationTimestamp
