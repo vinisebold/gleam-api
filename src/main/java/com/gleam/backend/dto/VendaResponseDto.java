@@ -9,7 +9,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
- * DTO para enviar os dados de uma Venda como resposta da API.
+ * Record para enviar os dados de uma Venda como resposta da API.
  */
 public record VendaResponseDto(
         Long id,

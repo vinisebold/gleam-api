@@ -1,48 +1,31 @@
 package com.gleam.backend.dto;
 
-import lombok.Data;
+import com.gleam.backend.model.Cliente;
+
 import java.time.LocalDateTime;
 
 /**
- * DTO (Data Transfer Object) para a entidade Cliente.
- * Define a estrutura de dados (JSON) que é enviada e recebida
- * pela API para todas as operações relacionadas a clientes.
+ * Record para representar um Cliente na API.
  */
-@Data
-public class ClienteDTO {
-
+public record ClienteDTO(
+        Long id,
+        String nome,
+        String telefone,
+        String email,
+        LocalDateTime dataCriacao,
+        LocalDateTime dataAtualizacao
+) {
     /**
-     * O ID único do cliente.
-     * Ignorado na criação, mas retornado pela API e usado para atualizações.
+     * Construtor para converter uma entidade Cliente em um ClienteDTO.
      */
-    private Long id;
-
-    /**
-     * O nome completo do cliente.
-     */
-    private String nome;
-
-    /**
-     * O número de telefone de contato do cliente.
-     */
-    private String telefone;
-
-    /**
-     * O endereço de e-mail do cliente.
-     */
-    private String email;
-
-    // --- Campos de Auditoria (Apenas para Resposta da API) ---
-
-    /**
-     * A data e hora em que o cliente foi criado.
-     * Este campo é apenas para leitura e é retornado pela API.
-     */
-    private LocalDateTime dataCriacao;
-
-    /**
-     * A data e hora da última atualização do cliente.
-     * Este campo é apenas para leitura e é retornado pela API.
-     */
-    private LocalDateTime dataAtualizacao;
+    public ClienteDTO(Cliente cliente) {
+        this(
+                cliente.getId(),
+                cliente.getNome(),
+                cliente.getTelefone(),
+                cliente.getEmail(),
+                cliente.getDataCriacao(),
+                cliente.getDataAtualizacao()
+        );
+    }
 }

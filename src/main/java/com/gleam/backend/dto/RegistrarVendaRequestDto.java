@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 /**
- * DTO para receber os dados da requisição de registro de uma nova venda.
+ * Record para receber os dados da requisição de registro de uma nova venda.
  */
 public record RegistrarVendaRequestDto(
         Long produtoId,
