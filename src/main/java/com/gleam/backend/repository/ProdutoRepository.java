@@ -1,17 +1,14 @@
 package com.gleam.backend.repository;
 
 import com.gleam.backend.model.Produto;
-import com.gleam.backend.model.StatusProduto;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ProdutoRepository extends JpaRepository<Produto, Long> {
-    Page<Produto> findByFornecedorIdAndStatus(Long fornecedorId, StatusProduto status, Pageable pageable);
-    Page<Produto> findByFornecedorId(Long fornecedorId, Pageable pageable);
-    Page<Produto> findByStatus(StatusProduto status, Pageable pageable);
-
-    long countByStatus(StatusProduto status);
+public interface ProdutoRepository extends JpaRepository<Produto, Long>, JpaSpecificationExecutor<Produto> {
+    // Os métodos de contagem e busca simples podem ser removidos daqui se não forem usados em outros lugares,
+    // pois a Specification cuidará das buscas filtradas.
+    // Manterei um para o seu método 'countDisponiveis' que é específico.
+    long countByStatus(com.gleam.backend.model.StatusProduto status);
 }

@@ -1,7 +1,8 @@
 package com.gleam.backend.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import java.math.BigDecimal;
@@ -11,7 +12,8 @@ import java.time.LocalDateTime;
  * Entidade que representa um Produto no sistema, seja em estoque ou vendido.
  * Esta é a fonte única da verdade para cada item físico rastreado.
  */
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "produtos")
 public class Produto {
@@ -27,6 +29,8 @@ public class Produto {
     private BigDecimal precoCusto;
 
     private String idReferencia;
+
+
 
     private String categoria;
 

@@ -23,8 +23,10 @@ public class ProdutoController {
     public ResponseEntity<Page<ProdutoDTO>> listarProdutos(
             @RequestParam(required = false) Long fornecedorId,
             @RequestParam(required = false) StatusProduto status,
+            // O parâmetro 'orderBy' foi removido daqui
             Pageable pageable) {
 
+        // E a chamada para o service agora está correta, sem o 'orderBy'
         Page<ProdutoDTO> produtos = produtoService.listarProdutosComFiltros(fornecedorId, status, pageable);
         return ResponseEntity.ok(produtos);
     }

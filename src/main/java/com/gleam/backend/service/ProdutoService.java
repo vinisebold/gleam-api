@@ -6,10 +6,12 @@ import com.gleam.backend.model.Produto;
 import com.gleam.backend.model.StatusProduto;
 import com.gleam.backend.repository.FornecedorRepository;
 import com.gleam.backend.repository.ProdutoRepository;
+import com.gleam.backend.repository.specification.ProdutoSpecification; // Import a nova classe
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,21 +22,17 @@ public class ProdutoService {
     private final FornecedorRepository fornecedorRepository;
 
     public Page<ProdutoDTO> listarProdutosComFiltros(Long fornecedorId, StatusProduto status, Pageable pageable) {
-        Page<Produto> produtos;
+        // Cria a especificação com base nos filtros fornecidos
+        Specification<Produto> spec = ProdutoSpecification.filtrarPor(fornecedorId, status);
 
-        if (fornecedorId != null && status != null) {
-            produtos = produtoRepository.findByFornecedorIdAndStatus(fornecedorId, status, pageable);
-        } else if (fornecedorId != null) {
-            produtos = produtoRepository.findByFornecedorId(fornecedorId, pageable);
-        } else if (status != null) {
-            produtos = produtoRepository.findByStatus(status, pageable);
-        } else {
-            // Se nenhum filtro for fornecido, lista todos os produtos
-            produtos = produtoRepository.findAll(pageable);
-        }
+        // O Spring Data JPA usa a Pageable para paginação e ordenação (ex: ?sort=nome,asc)
+        Page<Produto> produtos = produtoRepository.findAll(spec, pageable);
 
         return produtos.map(ProdutoDTO::new);
     }
+
+    // O parâmetro 'orderBy' foi removido do controller e do service, pois o 'Pageable' já lida com isso nativamente
+    // através do parâmetro '?sort='. Isso é mais flexível e padrão no Spring.
 
     public ProdutoDTO findById(Long id) {
         return produtoRepository.findById(id)
@@ -62,7 +60,6 @@ public class ProdutoService {
         Produto produto = new Produto();
         mapDtoToEntity(produtoDTO, produto, fornecedor);
 
-        // Define o ID de referência na entidade
         produto.setIdReferencia(idReferencia);
 
         Produto produtoSalvo = produtoRepository.save(produto);
@@ -113,8 +110,12 @@ public class ProdutoService {
         produto.setPrecoCusto(dto.precoCusto());
         produto.setAcabamento(dto.acabamento());
         produto.setCategoria(dto.categoria());
-        produto.setIdReferencia(dto.idReferencia());
+        // O idReferencia é tratado separadamente nos métodos save/update
         produto.setFornecedor(fornecedor);
+        // O status é definido pelo @PrePersist na criação ou pode ser atualizado via DTO se necessário
+        if (dto.status() != null) {
+            produto.setStatus(dto.status());
+        }
     }
 
     private String getPrefixoPorCategoria(Fornecedor fornecedor, String nomeCategoria) {
