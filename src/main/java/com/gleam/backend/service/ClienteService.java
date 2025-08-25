@@ -63,6 +63,7 @@ public class ClienteService {
      * @param id  O ID do cliente a ser atualizado.
      * @param dto O DTO com os novos dados para o cliente.
      * @return O ClienteDTO do cliente atualizado.
+     * @throws EntityNotFoundException se nenhum cliente for encontrado com o ID fornecido.
      */
     @Transactional
     public ClienteDTO update(Long id, ClienteDTO dto) {
@@ -78,6 +79,7 @@ public class ClienteService {
      * Apaga um cliente do banco de dados.
      *
      * @param id O ID do cliente a ser apagado.
+     * @throws EntityNotFoundException se nenhum cliente for encontrado com o ID fornecido.
      */
     @Transactional
     public void delete(Long id) {
@@ -89,6 +91,7 @@ public class ClienteService {
 
     /**
      * Realiza o mapeamento dos dados do DTO para a entidade Cliente.
+     * Atualiza todos os campos modificáveis do cliente com os valores do DTO.
      *
      * @param dto     O DTO com os dados de entrada.
      * @param cliente A entidade Cliente a ser atualizada.
@@ -97,6 +100,7 @@ public class ClienteService {
         cliente.setNome(dto.nome());
         cliente.setTelefone(dto.telefone());
         cliente.setCpf(dto.cpf());
-        cliente.setDescricao(dto.descricao()); // Novo campo adicionado
+        cliente.setDescricao(dto.descricao());
+        cliente.setEmail(dto.email());
     }
 }

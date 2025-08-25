@@ -5,7 +5,6 @@ import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import java.time.LocalDateTime;
-import java.util.List;
 
 /**
  * Entidade que representa um Cliente no sistema.
@@ -42,9 +41,17 @@ public class Cliente {
     /**
      * Uma breve descrição ou observação sobre o cliente.
      * Por exemplo: histórico, preferências ou qualquer informação relevante.
+     * Campo opcional.
      */
-    @Column(length = 255)
+    @Column(nullable = true, length = 255)
     private String descricao;
+
+    /**
+     * Email do cliente.
+     * Campo opcional.
+     */
+    @Column(nullable = true, length = 255)
+    private String email;
 
     // --- Campos de Auditoria ---
 

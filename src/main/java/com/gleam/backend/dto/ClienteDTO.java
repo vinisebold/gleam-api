@@ -11,7 +11,8 @@ public record ClienteDTO(
         String nome,
         String telefone,
         String cpf,
-        String descricao,           // Novo campo de descrição
+        String descricao,
+        String email,
         LocalDateTime dataCriacao,
         LocalDateTime dataAtualizacao
 ) {
@@ -24,7 +25,8 @@ public record ClienteDTO(
                 cliente.getNome(),
                 cliente.getTelefone(),
                 cliente.getCpf(),
-                cliente.getDescricao(), // Novo campo de descrição
+                cliente.getDescricao(),
+                cliente.getEmail(),
                 cliente.getDataCriacao(),
                 cliente.getDataAtualizacao()
         );
