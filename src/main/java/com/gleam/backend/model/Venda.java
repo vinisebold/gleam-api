@@ -21,9 +21,12 @@ public class Venda {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Relacionamento com a peça vendida. Uma Venda está ligada a um Produto.
-    // 'OneToOne' porque, pois a regra de negócio dita que cada Produto só pode ser vendido uma vez.
-    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    /**
+     * Relacionamento com a peça vendida.
+     * Muitas vendas podem referenciar o mesmo Produto,
+     * permitindo histórico de vendas e cancelamentos.
+     */
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "produto_id", nullable = false)
     private Produto produto;
 
