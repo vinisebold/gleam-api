@@ -39,6 +39,13 @@ public class Cliente {
     @Column(nullable = true, length = 14)
     private String cpf;
 
+    /**
+     * Uma breve descrição ou observação sobre o cliente.
+     * Por exemplo: histórico, preferências ou qualquer informação relevante.
+     */
+    @Column(length = 255)
+    private String descricao;
+
     // --- Campos de Auditoria ---
 
     /**

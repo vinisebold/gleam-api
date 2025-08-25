@@ -97,5 +97,6 @@ public class ClienteService {
         cliente.setNome(dto.nome());
         cliente.setTelefone(dto.telefone());
         cliente.setCpf(dto.cpf());
+        cliente.setDescricao(dto.descricao()); // Novo campo adicionado
     }
 }
