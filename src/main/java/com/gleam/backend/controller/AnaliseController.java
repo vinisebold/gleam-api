@@ -1,7 +1,7 @@
 package com.gleam.backend.controller;
 
 import com.gleam.backend.dto.AnaliseLucroDTO;
-import com.gleam.backend.model.enums.PeriodoAnalise;
+import com.gleam.backend.model.PeriodoAnalise;
 import com.gleam.backend.service.AnaliseService;
 import com.gleam.backend.service.AnaliseService.PontoGrafico; // Importa o record interno
 import lombok.RequiredArgsConstructor;

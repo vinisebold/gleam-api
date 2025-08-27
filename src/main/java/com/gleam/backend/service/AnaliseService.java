@@ -1,7 +1,7 @@
 package com.gleam.backend.service;
 
 import com.gleam.backend.dto.AnaliseLucroDTO;
-import com.gleam.backend.model.enums.PeriodoAnalise;
+import com.gleam.backend.model.PeriodoAnalise;
 import com.gleam.backend.repository.VendaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

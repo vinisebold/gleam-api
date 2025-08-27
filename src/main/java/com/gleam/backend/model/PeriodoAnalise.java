@@ -1,4 +1,4 @@
-package com.gleam.backend.model.enums;
+package com.gleam.backend.model;
 
 /**
  * Enum unificado para definir os períodos de tempo para cards e gráficos.
