@@ -19,7 +19,7 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedOrigins(
                         "http://localhost:4200",
                         "https://ominous-goldfish-9w9j6j6qv6pf4rp-4200.app.github.dev",
-                        "https://entra21-frontend-tcc.vercel.app",
+                        "https://gleam.software",
                         "https://4200-firebase-entra21-frontend-tcc-1755514396990.cluster-l2bgochoazbomqgfmlhuvdvgiy.cloudworkstations.dev"
                 )
                 // Define os métodos HTTP permitidos (GET, POST, PUT, DELETE, etc.)
