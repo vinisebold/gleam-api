@@ -22,6 +22,11 @@ FROM eclipse-temurin:21-jre-alpine
 
 WORKDIR /app
 
+# Instala o pacote de dados de fuso horário (tzdata)
+RUN apk add --no-cache tzdata
+# Define a variável de ambiente TZ para o fuso horário de São Paulo (UTC-3)
+ENV TZ=America/Sao_Paulo
+
 # Cria um usuário e grupo não-root para rodar a aplicação (melhor prática de segurança)
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 
