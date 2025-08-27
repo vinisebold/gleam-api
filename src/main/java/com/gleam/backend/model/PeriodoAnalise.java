@@ -1,10 +1,11 @@
 package com.gleam.backend.model.enums;
 
 /**
- * Enum para definir os períodos de tempo aceitos nas análises.
+ * Enum unificado para definir os períodos de tempo para cards e gráficos.
  */
 public enum PeriodoAnalise {
-    DIA,
-    SEMANA,
-    MES
+    DIA,    // Usado pelo card
+    SEMANA, // Usado por ambos
+    MES,    // Usado por ambos
+    ANO     // Usado pelo gráfico
 }
