@@ -18,7 +18,7 @@ public class WebConfig implements WebMvcConfigurer {
                 // Define as origens permitidas para fazer requisições
                 .allowedOrigins(
                         "http://localhost:4200",
-                        "https://ominous-goldfish-9w9j6j6qv6pf4rp-4200.app.github.dev",
+                        "https://symmetrical-sniffle-59jjpvjjv524rv4-4200.app.github.dev/",
                         "https://gleam.software",
                         "https://4200-firebase-entra21-frontend-tcc-1755514396990.cluster-l2bgochoazbomqgfmlhuvdvgiy.cloudworkstations.dev"
                 )
