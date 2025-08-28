@@ -1,18 +1,22 @@
 package com.gleam.backend.service;
 
+import com.gleam.backend.dto.EstoqueCategoriaDTO;
 import com.gleam.backend.dto.ProdutoDTO;
 import com.gleam.backend.model.Fornecedor;
 import com.gleam.backend.model.Produto;
 import com.gleam.backend.model.StatusProduto;
 import com.gleam.backend.repository.FornecedorRepository;
 import com.gleam.backend.repository.ProdutoRepository;
-import com.gleam.backend.repository.specification.ProdutoSpecification; // Import a nova classe
+import com.gleam.backend.repository.specification.ProdutoSpecification;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -22,17 +26,10 @@ public class ProdutoService {
     private final FornecedorRepository fornecedorRepository;
 
     public Page<ProdutoDTO> listarProdutosComFiltros(Long fornecedorId, StatusProduto status, Pageable pageable) {
-        // Cria a especificação com base nos filtros fornecidos
         Specification<Produto> spec = ProdutoSpecification.filtrarPor(fornecedorId, status);
-
-        // O Spring Data JPA usa a Pageable para paginação e ordenação (ex: ?sort=nome,asc)
         Page<Produto> produtos = produtoRepository.findAll(spec, pageable);
-
         return produtos.map(ProdutoDTO::new);
     }
-
-    // O parâmetro 'orderBy' foi removido do controller e do service, pois o 'Pageable' já lida com isso nativamente
-    // através do parâmetro '?sort='. Isso é mais flexível e padrão no Spring.
 
     public ProdutoDTO findById(Long id) {
         return produtoRepository.findById(id)
@@ -58,7 +55,7 @@ public class ProdutoService {
         String idReferencia = prefixo + produtoDTO.idReferencia();
 
         Produto produto = new Produto();
-        mapDtoToEntity(produtoDTO, produto, fornecedor);
+        mapDtoToEntity(produtoDTO, produto, fornecedor); // Chamada correta
 
         produto.setIdReferencia(idReferencia);
 
@@ -86,7 +83,7 @@ public class ProdutoService {
 
         String idReferencia = prefixo + produtoDTO.idReferencia();
 
-        mapDtoToEntity(produtoDTO, produtoExistente, fornecedor);
+        mapDtoToEntity(produtoDTO, produtoExistente, fornecedor); // Chamada correta
 
         produtoExistente.setIdReferencia(idReferencia);
 
@@ -104,15 +101,14 @@ public class ProdutoService {
         produtoRepository.deleteById(id);
     }
 
+    // AQUI ESTÁ A CORREÇÃO
     private void mapDtoToEntity(ProdutoDTO dto, Produto produto, Fornecedor fornecedor) {
         produto.setNome(dto.nome());
         produto.setPrecoVenda(dto.precoVenda());
         produto.setPrecoCusto(dto.precoCusto());
         produto.setAcabamento(dto.acabamento());
         produto.setCategoria(dto.categoria());
-        // O idReferencia é tratado separadamente nos métodos save/update
         produto.setFornecedor(fornecedor);
-        // O status é definido pelo @PrePersist na criação ou pode ser atualizado via DTO se necessário
         if (dto.status() != null) {
             produto.setStatus(dto.status());
         }
@@ -132,5 +128,14 @@ public class ProdutoService {
             case "piercing" -> fornecedor.getCodigoPiercing();
             default -> null;
         };
+    }
+
+    /**
+     * Obtém um resumo completo do estoque, agregado por categoria.
+     * @return Lista com os dados de quantidade e valor para cada categoria em estoque.
+     */
+    @Transactional(readOnly = true)
+    public List<EstoqueCategoriaDTO> getResumoEstoquePorCategoria() {
+        return produtoRepository.getResumoEstoquePorCategoria();
     }
 }

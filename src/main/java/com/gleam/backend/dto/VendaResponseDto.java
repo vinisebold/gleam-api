@@ -8,14 +8,11 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-/**
- * Record para enviar os dados de uma Venda como resposta da API.
- */
 public record VendaResponseDto(
         Long id,
-        ProdutoDTO produto, // Incluímos os detalhes do produto vendido
+        ProdutoDTO produto,
         Long clienteId,
-        String nomeCliente, // Útil para o frontend não precisar buscar o cliente
+        String nomeCliente,
         BigDecimal precoVenda,
         BigDecimal lucro,
         FormaPagamento formaPagamento,
@@ -27,6 +24,7 @@ public record VendaResponseDto(
 ) {
     /**
      * Construtor para converter uma entidade Venda em um DTO.
+     * Isto é essencial para o VendaService funcionar.
      */
     public VendaResponseDto(Venda venda) {
         this(
