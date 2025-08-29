@@ -1,6 +1,7 @@
 package com.gleam.backend.service;
 
 import com.gleam.backend.dto.EstoqueCategoriaDTO;
+import com.gleam.backend.dto.EstoqueGlobalDTO; // <-- Import necessário
 import com.gleam.backend.dto.ProdutoDTO;
 import com.gleam.backend.model.Fornecedor;
 import com.gleam.backend.model.Produto;
@@ -55,7 +56,7 @@ public class ProdutoService {
         String idReferencia = prefixo + produtoDTO.idReferencia();
 
         Produto produto = new Produto();
-        mapDtoToEntity(produtoDTO, produto, fornecedor); // Chamada correta
+        mapDtoToEntity(produtoDTO, produto, fornecedor);
 
         produto.setIdReferencia(idReferencia);
 
@@ -83,7 +84,7 @@ public class ProdutoService {
 
         String idReferencia = prefixo + produtoDTO.idReferencia();
 
-        mapDtoToEntity(produtoDTO, produtoExistente, fornecedor); // Chamada correta
+        mapDtoToEntity(produtoDTO, produtoExistente, fornecedor);
 
         produtoExistente.setIdReferencia(idReferencia);
 
@@ -101,7 +102,6 @@ public class ProdutoService {
         produtoRepository.deleteById(id);
     }
 
-    // AQUI ESTÁ A CORREÇÃO
     private void mapDtoToEntity(ProdutoDTO dto, Produto produto, Fornecedor fornecedor) {
         produto.setNome(dto.nome());
         produto.setPrecoVenda(dto.precoVenda());
@@ -132,10 +132,17 @@ public class ProdutoService {
 
     /**
      * Obtém um resumo completo do estoque, agregado por categoria.
-     * @return Lista com os dados de quantidade e valor para cada categoria em estoque.
      */
     @Transactional(readOnly = true)
     public List<EstoqueCategoriaDTO> getResumoEstoquePorCategoria() {
         return produtoRepository.getResumoEstoquePorCategoria();
+    }
+
+    /**
+     * Obtém um resumo global de todo o estoque.
+     */
+    @Transactional(readOnly = true)
+    public EstoqueGlobalDTO getResumoGlobalEstoque() {
+        return produtoRepository.getResumoGlobalEstoque();
     }
 }
