@@ -27,7 +27,7 @@ public class Venda {
      * permitindo histórico de vendas e cancelamentos.
      */
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "produto_id")
+    @JoinColumn(name = "produto_id", nullable = true)
     private Produto produto;
 
     // Relacionamento com o cliente. Muitas Vendas podem pertencer a um Cliente.
