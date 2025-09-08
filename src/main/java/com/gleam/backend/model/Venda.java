@@ -26,8 +26,8 @@ public class Venda {
      * Muitas vendas podem referenciar o mesmo Produto,
      * permitindo histórico de vendas e cancelamentos.
      */
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "produto_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "produto_id")
     private Produto produto;
 
     // Relacionamento com o cliente. Muitas Vendas podem pertencer a um Cliente.

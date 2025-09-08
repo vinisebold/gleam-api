@@ -8,6 +8,7 @@ import com.gleam.backend.model.Produto;
 import com.gleam.backend.model.StatusProduto;
 import com.gleam.backend.repository.FornecedorRepository;
 import com.gleam.backend.repository.ProdutoRepository;
+import com.gleam.backend.repository.VendaRepository;
 import com.gleam.backend.repository.specification.ProdutoSpecification;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,7 @@ import java.util.List;
 public class ProdutoService {
 
     private final ProdutoRepository produtoRepository;
+    private final VendaRepository vendaRepository;
     private final FornecedorRepository fornecedorRepository;
 
     public Page<ProdutoDTO> listarProdutosComFiltros(Long fornecedorId, StatusProduto status, Pageable pageable) {
@@ -96,9 +98,7 @@ public class ProdutoService {
         Produto produto = produtoRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Produto não encontrado com o ID: " + id));
 
-        if (produto.getStatus() == StatusProduto.VENDIDO) {
-            throw new IllegalStateException("Não é possível excluir um produto que já foi vendido. Ele faz parte do histórico de vendas.");
-        }
+        vendaRepository.desvincularProdutoDeVendas(id);
         produtoRepository.deleteById(id);
     }
 
