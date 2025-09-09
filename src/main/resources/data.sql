@@ -1,89 +1,106 @@
--- First, delete existing data in the correct order to avoid foreign key constraints
+-- Delete existing data in order to respect foreign key constraints
 DELETE FROM vendas;
 DELETE FROM produtos;
 DELETE FROM clientes;
 DELETE FROM fornecedores;
 
--- Dumping data for table fornecedores
-INSERT INTO fornecedores (id, cnpj, codigo_anel, codigo_berloque, codigo_bracelete, codigo_brinco, codigo_colar, codigo_conjunto, codigo_piercing, codigo_pingente, codigo_pulseira, data_atualizacao, data_criacao, descricao, nome, telefone) VALUES (1,'12.345.678/0001-90','An','Bq','Bc','Br','Cl','Cj','Pirc','Pg','Pl','2025-02-01 10:00:00.000000','2025-02-01 10:00:00.000000','Especializado em semi-joias de prata.','Fornecedor A','(48) 3456-7890');
-INSERT INTO fornecedores (id, cnpj, codigo_anel, codigo_berloque, codigo_bracelete, codigo_brinco, codigo_colar, codigo_conjunto, codigo_piercing, codigo_pingente, codigo_pulseira, data_atualizacao, data_criacao, descricao, nome, telefone) VALUES (2,'23.456.789/0001-01','An','Bq','Bc','Br','Cl','Cj','Pirc','PG','Pl','2025-02-01 11:00:00.000000','2025-02-01 11:00:00.000000','Fabricação de joias finas em ouro 18k','Fornecedor B','(47) 2345-6789');
-INSERT INTO fornecedores (id, cnpj, codigo_anel, codigo_berloque, codigo_bracelete, codigo_brinco, codigo_colar, codigo_conjunto, codigo_piercing, codigo_pingente, codigo_pulseira, data_atualizacao, data_criacao, descricao, nome, telefone) VALUES (3,'34.567.890/0001-12','An','Bq','Bc','Br','Cl','Cj','Pirc','PG','Pl','2025-02-01 12:00:00.000000','2025-02-01 12:00:00.000000','bijuterias e semi-joias.','Fornecedor C','(55) 4567-8901');
-INSERT INTO fornecedores (id, cnpj, codigo_anel, codigo_berloque, codigo_bracelete, codigo_brinco, codigo_colar, codigo_conjunto, codigo_piercing, codigo_pingente, codigo_pulseira, data_atualizacao, data_criacao, descricao, nome, telefone) VALUES (4,'45.678.901/0001-23','An','Bq','Bc','Br','Cl','Cj','Pirc','PG','Pl','2025-02-01 13:00:00.000000','2025-02-01 13:00:00.000000','joias de prata e ouro branco.','Fornecedor D','(47) 3456-1234');
+-- Insert data into fornecedores
+INSERT INTO fornecedores (id, cnpj, codigo_anel, codigo_berloque, codigo_bracelete, codigo_brinco, codigo_colar, codigo_conjunto, codigo_piercing, codigo_pingente, codigo_pulseira, data_atualizacao, data_criacao, descricao, nome, telefone) VALUES
+(1, '12.345.678/0001-90', 'An', 'Bq', 'Bc', 'Br', 'Cl', 'Cj', 'Pirc', 'Pg', 'Pl', '2025-02-01 10:00:00.000000', '2025-02-01 10:00:00.000000', 'Especializado em semi-joias de prata.', 'Fornecedor A', '(48) 3456-7890'),
+(2, '23.456.789/0001-01', 'An', 'Bq', 'Bc', 'Br', 'Cl', 'Cj', 'Pirc', 'PG', 'Pl', '2025-02-01 11:00:00.000000', '2025-02-01 11:00:00.000000', 'Fabricação de joias finas em ouro 18k', 'Fornecedor B', '(47) 2345-6789'),
+(3, '34.567.890/0001-12', 'An', 'Bq', 'Bc', 'Br', 'Cl', 'Cj', 'Pirc', 'PG', 'Pl', '2025-02-01 12:00:00.000000', '2025-02-01 12:00:00.000000', 'bijuterias e semi-joias.', 'Fornecedor C', '(55) 4567-8901'),
+(4, '45.678.901/0001-23', 'An', 'Bq', 'Bc', 'Br', 'Cl', 'Cj', 'Pirc', 'PG', 'Pl', '2025-02-01 13:00:00.000000', '2025-02-01 13:00:00.000000', 'joias de prata e ouro branco.', 'Fornecedor D', '(47) 3456-1234');
 
--- Dumping data for table clientes
-INSERT INTO clientes (id, cpf, data_atualizacao, data_criacao, descricao, email, nome, telefone) VALUES (1,'111.222.333-44','2025-02-10 10:00:00.000000','2025-02-10 10:00:00.000000','Alberto Stein','ana.silva@email.com','Ana Clara Silva','(11) 98765-4321');
-INSERT INTO clientes (id, cpf, data_atualizacao, data_criacao, descricao, email, nome, telefone) VALUES (2,'222.333.444-55','2025-02-15 11:00:00.000000','2025-02-15 11:00:00.000000','','bruno.cp@provedor.net','Bruno Costa Pereira','(21) 2345-6789');
-INSERT INTO clientes (id, cpf, data_atualizacao, data_criacao, descricao, email, nome, telefone) VALUES (3,'333.444.555-66','2025-02-20 12:00:00.000000','2025-02-20 12:00:00.000000','Anita Garibaldi','carla.lima@mail.org','Carla Souza Lima','(31) 99999-1111');
-INSERT INTO clientes (id, cpf, data_atualizacao, data_criacao, descricao, email, nome, telefone) VALUES (4,'444.555.666-77','2025-02-25 13:00:00.000000','2025-02-25 13:00:00.000000','','d.santos@emailserver.com','Daniel Oliveira Santos','(41) 4444-3333');
-INSERT INTO clientes (id, cpf, data_atualizacao, data_criacao, descricao, email, nome, telefone) VALUES (5,'555.666.777-88','2025-03-05 10:00:00.000000','2025-03-05 10:00:00.000000','','eduarda.gomes@mail.com','Eduarda Ferreira Gomes','(51) 91234-5678');
-INSERT INTO clientes (id, cpf, data_atualizacao, data_criacao, descricao, email, nome, telefone) VALUES (6,'666.777.888-99','2025-03-10 11:00:00.000000','2025-03-10 11:00:00.000000','','f.rocha@email.br','Felipe Martins Rocha','(61) 3333-2222');
-INSERT INTO clientes (id, cpf, data_atualizacao, data_criacao, descricao, email, nome, telefone) VALUES (7,'777.888.999-00','2025-03-15 12:00:00.000000','2025-03-15 12:00:00.000000','','giovana.alves@provedor.com','Giovana Almeida Alves','(71) 98888-7777');
-INSERT INTO clientes (id, cpf, data_atualizacao, data_criacao, descricao, email, nome, telefone) VALUES (8,'888.999.000-11','2025-03-20 13:00:00.000000','2025-03-20 13:00:00.000000','','heitor.rp@email.net','Heitor Rodrigues Pinto','(81) 5555-1111');
-INSERT INTO clientes (id, cpf, data_atualizacao, data_criacao, descricao, email, nome, telefone) VALUES (9,'999.000.111-22','2025-03-25 14:00:00.000000','2025-03-25 14:00:00.000000','','isabela.castro@mailservice.org','Isabela Castro Pereira','(91) 97654-3210');
-INSERT INTO clientes (id, cpf, data_atualizacao, data_criacao, descricao, email, nome, telefone) VALUES (10,'101.010.101-01','2025-03-30 15:00:00.000000','2025-03-30 15:00:00.000000','','j.victor.f@email.com','João Victor Fernandes','(11) 4002-8922');
-INSERT INTO clientes (id, cpf, data_atualizacao, data_criacao, descricao, email, nome, telefone) VALUES (11,'202.020.202-02','2025-04-05 16:00:00.000000','2025-04-05 16:00:00.000000','','larissa.dias@emailserver.com','Larissa Ribeiro Dias','(31) 98877-6655');
-INSERT INTO clientes (id, cpf, data_atualizacao, data_criacao, descricao, email, nome, telefone) VALUES (12,'303.030.303-03','2025-04-10 17:00:00.000000','2025-04-10 17:00:00.000000','','mateus.borges@email.br','Mateus Henrique Borges','(41) 91122-3344');
+-- Insert data into clientes
+INSERT INTO clientes (id, cpf, data_atualizacao, data_criacao, descricao, email, nome, telefone) VALUES
+(1, '111.222.333-44', '2025-02-10 10:00:00.000000', '2025-02-10 10:00:00.000000', 'Alberto Stein', 'ana.silva@email.com', 'Ana Clara Silva', '(11) 98765-4321'),
+(2, '222.333.444-55', '2025-02-15 11:00:00.000000', '2025-02-15 11:00:00.000000', '', 'bruno.cp@provedor.net', 'Bruno Costa Pereira', '(21) 2345-6789'),
+(3, '333.444.555-66', '2025-02-20 12:00:00.000000', '2025-02-20 12:00:00.000000', 'Anita Garibaldi', 'carla.lima@mail.org', 'Carla Souza Lima', '(31) 99999-1111'),
+(4, '444.555.666-77', '2025-02-25 13:00:00.000000', '2025-02-25 13:00:00.000000', '', 'd.santos@emailserver.com', 'Daniel Oliveira Santos', '(41) 4444-3333'),
+(5, '555.666.777-88', '2025-03-05 10:00:00.000000', '2025-03-05 10:00:00.000000', '', 'eduarda.gomes@mail.com', 'Eduarda Ferreira Gomes', '(51) 91234-5678'),
+(6, '666.777.888-99', '2025-03-10 11:00:00.000000', '2025-03-10 11:00:00.000000', '', 'f.rocha@email.br', 'Felipe Martins Rocha', '(61) 3333-2222'),
+(7, '777.888.999-00', '2025-03-15 12:00:00.000000', '2025-03-15 12:00:00.000000', '', 'giovana.alves@provedor.com', 'Giovana Almeida Alves', '(71) 98888-7777'),
+(8, '888.999.000-11', '2025-03-20 13:00:00.000000', '2025-03-20 13:00:00.000000', '', 'heitor.rp@email.net', 'Heitor Rodrigues Pinto', '(81) 5555-1111'),
+(9, '999.000.111-22', '2025-03-25 14:00:00.000000', '2025-03-25 14:00:00.000000', '', 'isabela.castro@mailservice.org', 'Isabela Castro Pereira', '(91) 97654-3210'),
+(10, '101.010.101-01', '2025-03-30 15:00:00.000000', '2025-03-30 15:00:00.000000', '', 'j.victor.f@email.com', 'João Victor Fernandes', '(11) 4002-8922'),
+(11, '202.020.202-02', '2025-04-05 16:00:00.000000', '2025-04-05 16:00:00.000000', '', 'larissa.dias@emailserver.com', 'Larissa Ribeiro Dias', '(31) 98877-6655'),
+(12, '303.030.303-03', '2025-04-10 17:00:00.000000', '2025-04-10 17:00:00.000000', '', 'mateus.borges@email.br', 'Mateus Henrique Borges', '(41) 91122-3344');
 
--- Dumping data for table produtos
+-- Insert data into produtos
 -- Anéis
-INSERT INTO produtos (id, acabamento, categoria, data_atualizacao, data_criacao, data_venda, id_referencia, nome, preco_custo, preco_venda, status, id_fornecedor) VALUES (1,'BANHO_PRATA','Anel','2025-02-05 10:00:00.000000','2025-02-05 10:00:00.000000',NULL,'An002','Anel Infinito Duplo',38.10,NULL,'EM_ESTOQUE',1);
-INSERT INTO produtos (id, acabamento, categoria, data_atualizacao, data_criacao, data_venda, id_referencia, nome, preco_custo, preco_venda, status, id_fornecedor) VALUES (2,'BANHO_DOURADO','Anel','2025-02-05 10:00:00.000000','2025-02-05 10:00:00.000000',NULL,'An123','Anel Coração Triplo',45.10,NULL,'EM_ESTOQUE',2);
-INSERT INTO produtos (id, acabamento, categoria, data_atualizacao, data_criacao, data_venda, id_referencia, nome, preco_custo, preco_venda, status, id_fornecedor) VALUES (3,'PRATA','Anel','2025-02-05 10:00:00.000000','2025-02-05 10:00:00.000000',NULL,'An456','Anel Nó da Amizade',65.60,NULL,'EM_ESTOQUE',3);
-INSERT INTO produtos (id, acabamento, categoria, data_atualizacao, data_criacao, data_venda, id_referencia, nome, preco_custo, preco_venda, status, id_fornecedor) VALUES (4,'BANHO_DOURADO','Anel','2025-02-05 10:00:00.000000','2025-02-05 10:00:00.000000',NULL,'An078','Anel Coroa Delicada',50.10,NULL,'EM_ESTOQUE',4);
-INSERT INTO produtos (id, acabamento, categoria, data_atualizacao, data_criacao, data_venda, id_referencia, nome, preco_custo, preco_venda, status, id_fornecedor) VALUES (5,'BANHO_PRATA','Anel','2025-02-05 10:00:00.000000','2025-02-05 10:00:00.000000',NULL,'An321','Anel Estrela Cadente',35.00,NULL,'EM_ESTOQUE',1);
-INSERT INTO produtos (id, acabamento, categoria, data_atualizacao, data_criacao, data_venda, id_referencia, nome, preco_custo, preco_venda, status, id_fornecedor) VALUES (6,'PRATA','Anel','2025-02-05 10:00:00.000000','2025-02-05 10:00:00.000000',NULL,'An499','Anel Espiral da Vida',70.60,NULL,'EM_ESTOQUE',2);
--- Berloques
-INSERT INTO produtos (id, acabamento, categoria, data_atualizacao, data_criacao, data_venda, id_referencia, nome, preco_custo, preco_venda, status, id_fornecedor) VALUES (7,'BANHO_PRATA','Berloque','2025-02-05 10:00:00.000000','2025-02-05 10:00:00.000000',NULL,'Bq011','Berloque Coração Vazado Duplo',38.10,NULL,'EM_ESTOQUE',3);
-INSERT INTO produtos (id, acabamento, categoria, data_atualizacao, data_criacao, data_venda, id_referencia, nome, preco_custo, preco_venda, status, id_fornecedor) VALUES (8,'PRATA','Berloque','2025-02-05 10:00:00.000000','2025-02-05 10:00:00.000000',NULL,'Bq234','Berloque Estrela do Mar',55.00,NULL,'EM_ESTOQUE',4);
-INSERT INTO produtos (id, acabamento, categoria, data_atualizacao, data_criacao, data_venda, id_referencia, nome, preco_custo, preco_venda, status, id_fornecedor) VALUES (9,'BANHO_PRATA','Berloque','2025-02-05 10:00:00.000000','2025-02-05 10:00:00.000000',NULL,'Bq345','Berloque Pena Leve',60.60,NULL,'EM_ESTOQUE',1);
-INSERT INTO produtos (id, acabamento, categoria, data_atualizacao, data_criacao, data_venda, id_referencia, nome, preco_custo, preco_venda, status, id_fornecedor) VALUES (10,'BANHO_DOURADO','Berloque','2025-02-05 10:00:00.000000','2025-02-05 10:00:00.000000',NULL,'Bq067','Berloque Trevo da Sorte',42.00,NULL,'EM_ESTOQUE',2);
-INSERT INTO produtos (id, acabamento, categoria, data_atualizacao, data_criacao, data_venda, id_referencia, nome, preco_custo, preco_venda, status, id_fornecedor) VALUES (11,'BANHO_PRATA','Berloque','2025-02-05 10:00:00.000000','2025-02-05 10:00:00.000000',NULL,'Bq189','Berloque Ramos de Oliva',34.10,NULL,'EM_ESTOQUE',3);
-INSERT INTO produtos (id, acabamento, categoria, data_atualizacao, data_criacao, data_venda, id_referencia, nome, preco_custo, preco_venda, status, id_fornecedor) VALUES (12,'PRATA','Berloque','2025-02-05 10:00:00.000000','2025-02-05 10:00:00.000000',NULL,'Bq400','Berloque Onda do Mar',58.10,NULL,'EM_ESTOQUE',4);
-INSERT INTO produtos (id, acabamento, categoria, data_atualizacao, data_criacao, data_venda, id_referencia, nome, preco_custo, preco_venda, status, id_fornecedor) VALUES (13,'BANHO_PRATA','Berloque','2025-02-05 10:00:00.000000','2025-02-05 10:00:00.000000',NULL,'Bq255','Berloque Flor Cerejeira',76.60,NULL,'EM_ESTOQUE',1);
--- Braceletes
-INSERT INTO produtos (id, acabamento, categoria, data_atualizacao, data_criacao, data_venda, id_referencia, nome, preco_custo, preco_venda, status, id_fornecedor) VALUES (14,'BANHO_PRATA','Bracelete','2025-02-05 10:00:00.000000','2025-02-05 10:00:00.000000',NULL,'Bc033','Bracelete Círculo Trançado',48.00,NULL,'EM_ESTOQUE',2);
-INSERT INTO produtos (id, acabamento, categoria, data_atualizacao, data_criacao, data_venda, id_referencia, nome, preco_custo, preco_venda, status, id_fornecedor) VALUES (15,'PRATA','Bracelete','2025-02-05 10:00:00.000000','2025-02-05 10:00:00.000000',NULL,'Bc111','Bracelete Folhas Unidas',95.10,NULL,'EM_ESTOQUE',3);
-INSERT INTO produtos (id, acabamento, categoria, data_atualizacao, data_criacao, data_venda, id_referencia, nome, preco_custo, preco_venda, status, id_fornecedor) VALUES (16,'BANHO_DOURADO','Bracelete','2025-02-05 10:00:00.000000','2025-02-05 10:00:00.000000',NULL,'Bc222','Bracelete Estrela Zirconia',65.60,NULL,'EM_ESTOQUE',4);
-INSERT INTO produtos (id, acabamento, categoria, data_atualizacao, data_criacao, data_venda, id_referencia, nome, preco_custo, preco_venda, status, id_fornecedor) VALUES (17,'BANHO_PRATA','Bracelete','2025-02-05 10:00:00.000000','2025-02-05 10:00:00.000000',NULL,'Bc444','Bracelete Flor do Campo',45.10,NULL,'EM_ESTOQUE',1);
-INSERT INTO produtos (id, acabamento, categoria, data_atualizacao, data_criacao, data_venda, id_referencia, nome, preco_custo, preco_venda, status, id_fornecedor) VALUES (18,'PRATA','Bracelete','2025-02-05 10:00:00.000000','2025-02-05 10:00:00.000000',NULL,'Bc055','Bracelete Gota Cristal',110.60,NULL,'EM_ESTOQUE',2);
-INSERT INTO produtos (id, acabamento, categoria, data_atualizacao, data_criacao, data_venda, id_referencia, nome, preco_custo, preco_venda, status, id_fornecedor) VALUES (19,'PRATA','Bracelete','2025-02-05 10:00:00.000000','2025-02-05 10:00:00.000000',NULL,'Bc300','Bracelete Nós Celtas',105.60,NULL,'EM_ESTOQUE',3);
--- Brincos
-INSERT INTO produtos (id, acabamento, categoria, data_atualizacao, data_criacao, data_venda, id_referencia, nome, preco_custo, preco_venda, status, id_fornecedor) VALUES (20,'BANHO_PRATA','Brinco','2025-02-05 10:00:00.000000','2025-02-05 10:00:00.000000',NULL,'Br001','Brinco Estrela Cravejada',40.60,NULL,'EM_ESTOQUE',4);
-INSERT INTO produtos (id, acabamento, categoria, data_atualizacao, data_criacao, data_venda, id_referencia, nome, preco_custo, preco_venda, status, id_fornecedor) VALUES (21,'BANHO_DOURADO','Brinco','2025-02-05 10:00:00.000000','2025-02-05 10:00:00.000000',NULL,'Br042','Brinco Laço Cravejado',55.10,NULL,'EM_ESTOQUE',1);
-INSERT INTO produtos (id, acabamento, categoria, data_atualizacao, data_criacao, data_venda, id_referencia, nome, preco_custo, preco_venda, status, id_fornecedor) VALUES (22,'PRATA','Brinco','2025-02-05 10:00:00.000000','2025-02-05 10:00:00.000000',NULL,'Br333','Brinco Flor Cravejada',80.00,NULL,'EM_ESTOQUE',2);
-INSERT INTO produtos (id, acabamento, categoria, data_atualizacao, data_criacao, data_venda, id_referencia, nome, preco_custo, preco_venda, status, id_fornecedor) VALUES (23,'DOURADO','Brinco','2025-02-05 10:00:00.000000','2025-02-05 10:00:00.000000',NULL,'Br500','Brinco Sol Radiante',952.00,NULL,'EM_ESTOQUE',3);
-INSERT INTO produtos (id, acabamento, categoria, data_atualizacao, data_criacao, data_venda, id_referencia, nome, preco_custo, preco_venda, status, id_fornecedor) VALUES (24,'BANHO_PRATA','Brinco','2025-02-05 10:00:00.000000','2025-02-05 10:00:00.000000',NULL,'Br127','Brinco Arco-Íris Delicado',78.10,NULL,'EM_ESTOQUE',4);
-INSERT INTO produtos (id, acabamento, categoria, data_atualizacao, data_criacao, data_venda, id_referencia, nome, preco_custo, preco_venda, status, id_fornecedor) VALUES (25,'PRATA','Brinco','2025-02-05 10:00:00.000000','2025-02-05 10:00:00.000000',NULL,'Br250','Brinco Gota',75.00,NULL,'EM_ESTOQUE',1);
-INSERT INTO produtos (id, acabamento, categoria, data_atualizacao, data_criacao, data_venda, id_referencia, nome, preco_custo, preco_venda, status, id_fornecedor) VALUES (26,'BANHO_DOURADO','Brinco','2025-02-05 10:00:00.000000','2025-02-05 10:00:00.000000',NULL,'Br088','Brinco Argola Torcida',60.60,NULL,'EM_ESTOQUE',2);
--- Colares
-INSERT INTO produtos (id, acabamento, categoria, data_atualizacao, data_criacao, data_venda, id_referencia, nome, preco_custo, preco_venda, status, id_fornecedor) VALUES (27,'PRATA','Colar','2025-02-05 10:00:00.000000','2025-02-05 10:00:00.000000',NULL,'Cl009','Colar Cruz Delicada',90.10,NULL,'EM_ESTOQUE',3);
-INSERT INTO produtos (id, acabamento, categoria, data_atualizacao, data_criacao, data_venda, id_referencia, nome, preco_custo, preco_venda, status, id_fornecedor) VALUES (28,'BANHO_PRATA','Colar','2025-02-05 10:00:00.000000','2025-02-05 10:00:00.000000',NULL,'Cl117','Colar Estrela Guia',45.00,NULL,'EM_ESTOQUE',4);
-INSERT INTO produtos (id, acabamento, categoria, data_atualizacao, data_criacao, data_venda, id_referencia, nome, preco_custo, preco_venda, status, id_fornecedor) VALUES (29,'BANHO_DOURADO','Colar','2025-02-05 10:00:00.000000','2025-02-05 10:00:00.000000',NULL,'Cl208','Colar Chave do Amor',68.60,NULL,'EM_ESTOQUE',1);
-INSERT INTO produtos (id, acabamento, categoria, data_atualizacao, data_criacao, data_venda, id_referencia, nome, preco_custo, preco_venda, status, id_fornecedor) VALUES (30,'PRATA','Colar','2025-02-05 10:00:00.000000','2025-02-05 10:00:00.000000',NULL,'Cl350','Colar Lua Vazada',85.00,NULL,'EM_ESTOQUE',2);
-INSERT INTO produtos (id, acabamento, categoria, data_atualizacao, data_criacao, data_venda, id_referencia, nome, preco_custo, preco_venda, status, id_fornecedor) VALUES (31,'BANHO_PRATA','Colar','2025-02-05 10:00:00.000000','2025-02-05 10:00:00.000000',NULL,'Cl475','Colar Infinito Coração',42.60,NULL,'EM_ESTOQUE',3);
-INSERT INTO produtos (id, acabamento, categoria, data_atualizacao, data_criacao, data_venda, id_referencia, nome, preco_custo, preco_venda, status, id_fornecedor) VALUES (32,'DOURADO','Colar','2025-02-05 10:00:00.000000','2025-02-05 10:00:00.000000',NULL,'Cl499','Colar Raio Reluzente',662.00,NULL,'EM_ESTOQUE',4);
-INSERT INTO produtos (id, acabamento, categoria, data_atualizacao, data_criacao, data_venda, id_referencia, nome, preco_custo, preco_venda, status, id_fornecedor) VALUES (33,'PRATA','Colar','2025-02-05 10:00:00.000000','2025-02-05 10:00:00.000000',NULL,'Cl066','Colar Coração Vazado',88.10,NULL,'EM_ESTOQUE',1);
-INSERT INTO produtos (id, acabamento, categoria, data_atualizacao, data_criacao, data_venda, id_referencia, nome, preco_custo, preco_venda, status, id_fornecedor) VALUES (34,'PRATA','Colar','2025-02-05 10:00:00.000000','2025-02-05 10:00:00.000000',NULL,'Cl199','Colar Cruz',92.60,NULL,'EM_ESTOQUE',2);
--- Conjuntos
-INSERT INTO produtos (id, acabamento, categoria, data_atualizacao, data_criacao, data_venda, id_referencia, nome, preco_custo, preco_venda, status, id_fornecedor) VALUES (35,'BANHO_PRATA','Conjunto','2025-02-05 10:00:00.000000','2025-02-05 10:00:00.000000',NULL,'Cj010','Conjunto Corações Entrelaçados',50.10,NULL,'EM_ESTOQUE',3);
-INSERT INTO produtos (id, acabamento, categoria, data_atualizacao, data_criacao, data_venda, id_referencia, nome, preco_custo, preco_venda, status, id_fornecedor) VALUES (36,'PRATA','Conjunto','2025-02-05 10:00:00.000000','2025-02-05 10:00:00.000000',NULL,'Cj150','Conjunto Borboleta Vazada',120.60,NULL,'EM_ESTOQUE',4);
-INSERT INTO produtos (id, acabamento, categoria, data_atualizacao, data_criacao, data_venda, id_referencia, nome, preco_custo, preco_venda, status, id_fornecedor) VALUES (37,'BANHO_DOURADO','Conjunto','2025-02-05 10:00:00.000000','2025-02-05 10:00:00.000000',NULL,'Cj275','Conjunto Gota Verde',70.10,NULL,'EM_ESTOQUE',1);
-INSERT INTO produtos (id, acabamento, categoria, data_atualizacao, data_criacao, data_venda, id_referencia, nome, preco_custo, preco_venda, status, id_fornecedor) VALUES (38,'BANHO_PRATA','Conjunto','2025-02-05 10:00:00.000000','2025-02-05 10:00:00.000000',NULL,'Cj390','Conjunto Símbolo Paz',48.00,NULL,'EM_ESTOQUE',2);
-INSERT INTO produtos (id, acabamento, categoria, data_atualizacao, data_criacao, data_venda, id_referencia, nome, preco_custo, preco_venda, status, id_fornecedor) VALUES (39,'PRATA','Conjunto','2025-02-05 10:00:00.000000','2025-02-05 10:00:00.000000',NULL,'Cj425','Conjunto Coração Batimento',115.10,NULL,'EM_ESTOQUE',3);
--- Piercings
-INSERT INTO produtos (id, acabamento, categoria, data_atualizacao, data_criacao, data_venda, id_referencia, nome, preco_custo, preco_venda, status, id_fornecedor) VALUES (40,'ACO','Piercing','2025-02-05 10:00:00.000000','2025-02-05 10:00:00.000000',NULL,'Pirc020','Piercing Mão Unida',25.10,NULL,'EM_ESTOQUE',4);
-INSERT INTO produtos (id, acabamento, categoria, data_atualizacao, data_criacao, data_venda, id_referencia, nome, preco_custo, preco_venda, status, id_fornecedor) VALUES (41,'BANHO_DOURADO','Piercing','2025-02-05 10:00:00.000000','2025-02-05 10:00:00.000000',NULL,'Pirc140','Piercing Gota Dourada',40.60,NULL,'EM_ESTOQUE',1);
-INSERT INTO produtos (id, acabamento, categoria, data_atualizacao, data_criacao, data_venda, id_referencia, nome, preco_custo, preco_venda, status, id_fornecedor) VALUES (42,'ACO','Piercing','2025-02-05 10:00:00.000000','2025-02-05 10:00:00.000000',NULL,'Pirc360','Piercing Estrela Tripla',28.00,NULL,'EM_ESTOQUE',2);
--- Pingentes
-INSERT INTO produtos (id, acabamento, categoria, data_atualizacao, data_criacao, data_venda, id_referencia, nome, preco_custo, preco_venda, status, id_fornecedor) VALUES (43,'BANHO_DOURADO','Pingente','2025-02-05 10:00:00.000000','2025-02-05 10:00:00.000000',NULL,'Pg030','Pingente Olho de Tigre',45.10,NULL,'EM_ESTOQUE',3);
-INSERT INTO produtos (id, acabamento, categoria, data_atualizacao, data_criacao, data_venda, id_referencia, nome, preco_custo, preco_venda, status, id_fornecedor) VALUES (44,'PRATA','Pingente','2025-02-05 10:00:00.000000','2025-02-05 10:00:00.000000',NULL,'Pg170','Pingente Flor de Liz',60.10,NULL,'EM_ESTOQUE',4);
-INSERT INTO produtos (id, acabamento, categoria, data_atualizacao, data_criacao, data_venda, id_referencia, nome, preco_custo, preco_venda, status, id_fornecedor) VALUES (45,'BANHO_PRATA','Pingente','2025-02-05 10:00:00.000000','2025-02-05 10:00:00.000000',NULL,'Pg290','Pingente Concha do Mar',35.10,NULL,'EM_ESTOQUE',1);
-INSERT INTO produtos (id, acabamento, categoria, data_atualizacao, data_criacao, data_venda, id_referencia, nome, preco_custo, preco_venda, status, id_fornecedor) VALUES (46,'BANHO_PRATA','Pingente','2025-02-05 10:00:00.000000','2025-02-05 10:00:00.000000',NULL,'Pg410','Pingente Estrela Noturna',33.00,NULL,'EM_ESTOQUE',2);
-INSERT INTO produtos (id, acabamento, categoria, data_atualizacao, data_criacao, data_venda, id_referencia, nome, preco_custo, preco_venda, status, id_fornecedor) VALUES (47,'DOURADO','Pingente','2025-02-05 10:00:00.000000','2025-02-05 10:00:00.000000',NULL,'Pg480','Pingente Círculo Solar',848.00,NULL,'EM_ESTOQUE',3);
-INSERT INTO produtos (id, acabamento, categoria, data_atualizacao, data_criacao, data_venda, id_referencia, nome, preco_custo, preco_venda, status, id_fornecedor) VALUES (48,'BANHO_DOURADO','Pingente','2025-02-05 10:00:00.000000','2025-02-05 10:00:00.000000',NULL,'Pg125','Pingente Árvore',50.10,NULL,'EM_ESTOQUE',4);
-INSERT INTO produtos (id, acabamento, categoria, data_atualizacao, data_criacao, data_venda, id_referencia, nome, preco_custo, preco_venda, status, id_fornecedor) VALUES (49,'BANHO_DOURADO','Pingente','2025-02-05 10:00:00.000000','2025-02-05 10:00:00.000000',NULL,'Pg245','Pingente Olho Grego',76.60,NULL,'EM_ESTOQUE',1);
+INSERT INTO produtos (id, acabamento, categoria, data_atualizacao, data_criacao, data_venda, id_referencia, nome, preco_custo, preco_venda, status, id_fornecedor) VALUES
+(1, 'BANHO_PRATA', 'Anel', '2025-02-05 10:00:00.000000', '2025-02-05 10:00:00.000000', NULL, 'An002', 'Anel Infinito Duplo', 38.10, NULL, 'EM_ESTOQUE', 1),
+(2, 'BANHO_DOURADO', 'Anel', '2025-02-05 10:00:00.000000', '2025-02-05 10:00:00.000000', NULL, 'An123', 'Anel Coração Triplo', 45.10, NULL, 'EM_ESTOQUE', 2),
+(3, 'PRATA', 'Anel', '2025-02-05 10:00:00.000000', '2025-02-05 10:00:00.000000', NULL, 'An456', 'Anel Nó da Amizade', 65.60, NULL, 'EM_ESTOQUE', 3),
+(4, 'BANHO_DOURADO', 'Anel', '2025-02-05 10:00:00.000000', '2025-02-05 10:00:00.000000', NULL, 'An078', 'Anel Coroa Delicada', 50.10, NULL, 'EM_ESTOQUE', 4),
+(5, 'BANHO_PRATA', 'Anel', '2025-02-05 10:00:00.000000', '2025-02-05 10:00:00.000000', NULL, 'An321', 'Anel Estrela Cadente', 35.00, NULL, 'EM_ESTOQUE', 1),
+(6, 'PRATA', 'Anel', '2025-02-05 10:00:00.000000', '2025-02-05 10:00:00.000000', NULL, 'An499', 'Anel Espiral da Vida', 70.60, NULL, 'EM_ESTOQUE', 2);
 
--- Novos produtos para Fornecedor 1 (id_fornecedor = 1)
+-- Berloques
+INSERT INTO produtos (id, acabamento, categoria, data_atualizacao, data_criacao, data_venda, id_referencia, nome, preco_custo, preco_venda, status, id_fornecedor) VALUES
+(7, 'BANHO_PRATA', 'Berloque', '2025-02-05 10:00:00.000000', '2025-02-05 10:00:00.000000', NULL, 'Bq011', 'Berloque Coração Vazado Duplo', 38.10, NULL, 'EM_ESTOQUE', 3),
+(8, 'PRATA', 'Berloque', '2025-02-05 10:00:00.000000', '2025-02-05 10:00:00.000000', NULL, 'Bq234', 'Berloque Estrela do Mar', 55.00, NULL, 'EM_ESTOQUE', 4),
+(9, 'BANHO_PRATA', 'Berloque', '2025-02-05 10:00:00.000000', '2025-02-05 10:00:00.000000', NULL, 'Bq345', 'Berloque Pena Leve', 60.60, NULL, 'EM_ESTOQUE', 1),
+(10, 'BANHO_DOURADO', 'Berloque', '2025-02-05 10:00:00.000000', '2025-02-05 10:00:00.000000', NULL, 'Bq067', 'Berloque Trevo da Sorte', 42.00, NULL, 'EM_ESTOQUE', 2),
+(11, 'BANHO_PRATA', 'Berloque', '2025-02-05 10:00:00.000000', '2025-02-05 10:00:00.000000', NULL, 'Bq189', 'Berloque Ramos de Oliva', 34.10, NULL, 'EM_ESTOQUE', 3),
+(12, 'PRATA', 'Berloque', '2025-02-05 10:00:00.000000', '2025-02-05 10:00:00.000000', NULL, 'Bq400', 'Berloque Onda do Mar', 58.10, NULL, 'EM_ESTOQUE', 4),
+(13, 'BANHO_PRATA', 'Berloque', '2025-02-05 10:00:00.000000', '2025-02-05 10:00:00.000000', NULL, 'Bq255', 'Berloque Flor Cerejeira', 76.60, NULL, 'EM_ESTOQUE', 1);
+
+-- Braceletes
+INSERT INTO produtos (id, acabamento, categoria, data_atualizacao, data_criacao, data_venda, id_referencia, nome, preco_custo, preco_venda, status, id_fornecedor) VALUES
+(14, 'BANHO_PRATA', 'Bracelete', '2025-02-05 10:00:00.000000', '2025-02-05 10:00:00.000000', NULL, 'Bc033', 'Bracelete Círculo Trançado', 48.00, NULL, 'EM_ESTOQUE', 2),
+(15, 'PRATA', 'Bracelete', '2025-02-05 10:00:00.000000', '2025-02-05 10:00:00.000000', NULL, 'Bc111', 'Bracelete Folhas Unidas', 95.10, NULL, 'EM_ESTOQUE', 3),
+(16, 'BANHO_DOURADO', 'Bracelete', '2025-02-05 10:00:00.000000', '2025-02-05 10:00:00.000000', NULL, 'Bc222', 'Bracelete Estrela Zirconia', 65.60, NULL, 'EM_ESTOQUE', 4),
+(17, 'BANHO_PRATA', 'Bracelete', '2025-02-05 10:00:00.000000', '2025-02-05 10:00:00.000000', NULL, 'Bc444', 'Bracelete Flor do Campo', 45.10, NULL, 'EM_ESTOQUE', 1),
+(18, 'PRATA', 'Bracelete', '2025-02-05 10:00:00.000000', '2025-02-05 10:00:00.000000', NULL, 'Bc055', 'Bracelete Gota Cristal', 110.60, NULL, 'EM_ESTOQUE', 2),
+(19, 'PRATA', 'Bracelete', '2025-02-05 10:00:00.000000', '2025-02-05 10:00:00.000000', NULL, 'Bc300', 'Bracelete Nós Celtas', 105.60, NULL, 'EM_ESTOQUE', 3);
+
+-- Brincos
+INSERT INTO produtos (id, acabamento, categoria, data_atualizacao, data_criacao, data_venda, id_referencia, nome, preco_custo, preco_venda, status, id_fornecedor) VALUES
+(20, 'BANHO_PRATA', 'Brinco', '2025-02-05 10:00:00.000000', '2025-02-05 10:00:00.000000', NULL, 'Br001', 'Brinco Estrela Cravejada', 40.60, NULL, 'EM_ESTOQUE', 4),
+(21, 'BANHO_DOURADO', 'Brinco', '2025-02-05 10:00:00.000000', '2025-02-05 10:00:00.000000', NULL, 'Br042', 'Brinco Laço Cravejado', 55.10, NULL, 'EM_ESTOQUE', 1),
+(22, 'PRATA', 'Brinco', '2025-02-05 10:00:00.000000', '2025-02-05 10:00:00.000000', NULL, 'Br333', 'Brinco Flor Cravejada', 80.00, NULL, 'EM_ESTOQUE', 2),
+(23, 'DOURADO', 'Brinco', '2025-02-05 10:00:00.000000', '2025-02-05 10:00:00.000000', NULL, 'Br500', 'Brinco Sol Radiante', 952.00, NULL, 'EM_ESTOQUE', 3),
+(24, 'BANHO_PRATA', 'Brinco', '2025-02-05 10:00:00.000000', '2025-02-05 10:00:00.000000', NULL, 'Br127', 'Brinco Arco-Íris Delicado', 78.10, NULL, 'EM_ESTOQUE', 4),
+(25, 'PRATA', 'Brinco', '2025-02-05 10:00:00.000000', '2025-02-05 10:00:00.000000', NULL, 'Br250', 'Brinco Gota', 75.00, NULL, 'EM_ESTOQUE', 1),
+(26, 'BANHO_DOURADO', 'Brinco', '2025-02-05 10:00:00.000000', '2025-02-05 10:00:00.000000', NULL, 'Br088', 'Brinco Argola Torcida', 60.60, NULL, 'EM_ESTOQUE', 2);
+
+-- Colares
+INSERT INTO produtos (id, acabamento, categoria, data_atualizacao, data_criacao, data_venda, id_referencia, nome, preco_custo, preco_venda, status, id_fornecedor) VALUES
+(27, 'PRATA', 'Colar', '2025-02-05 10:00:00.000000', '2025-02-05 10:00:00.000000', NULL, 'Cl009', 'Colar Cruz Delicada', 90.10, NULL, 'EM_ESTOQUE', 3),
+(28, 'BANHO_PRATA', 'Colar', '2025-02-05 10:00:00.000000', '2025-02-05 10:00:00.000000', NULL, 'Cl117', 'Colar Estrela Guia', 45.00, NULL, 'EM_ESTOQUE', 4),
+(29, 'BANHO_DOURADO', 'Colar', '2025-02-05 10:00:00.000000', '2025-02-05 10:00:00.000000', NULL, 'Cl208', 'Colar Chave do Amor', 68.60, NULL, 'EM_ESTOQUE', 1),
+(30, 'PRATA', 'Colar', '2025-02-05 10:00:00.000000', '2025-02-05 10:00:00.000000', NULL, 'Cl350', 'Colar Lua Vazada', 85.00, NULL, 'EM_ESTOQUE', 2),
+(31, 'BANHO_PRATA', 'Colar', '2025-02-05 10:00:00.000000', '2025-02-05 10:00:00.000000', NULL, 'Cl475', 'Colar Infinito Coração', 42.60, NULL, 'EM_ESTOQUE', 3),
+(32, 'DOURADO', 'Colar', '2025-02-05 10:00:00.000000', '2025-02-05 10:00:00.000000', NULL, 'Cl499', 'Colar Raio Reluzente', 662.00, NULL, 'EM_ESTOQUE', 4),
+(33, 'PRATA', 'Colar', '2025-02-05 10:00:00.000000', '2025-02-05 10:00:00.000000', NULL, 'Cl066', 'Colar Coração Vazado', 88.10, NULL, 'EM_ESTOQUE', 1),
+(34, 'PRATA', 'Colar', '2025-02-05 10:00:00.000000', '2025-02-05 10:00:00.000000', NULL, 'Cl199', 'Colar Cruz', 92.60, NULL, 'EM_ESTOQUE', 2);
+
+-- Conjuntos
+INSERT INTO produtos (id, acabamento, categoria, data_atualizacao, data_criacao, data_venda, id_referencia, nome, preco_custo, preco_venda, status, id_fornecedor) VALUES
+(35, 'BANHO_PRATA', 'Conjunto', '2025-02-05 10:00:00.000000', '2025-02-05 10:00:00.000000', NULL, 'Cj010', 'Conjunto Corações Entrelaçados', 50.10, NULL, 'EM_ESTOQUE', 3),
+(36, 'PRATA', 'Conjunto', '2025-02-05 10:00:00.000000', '2025-02-05 10:00:00.000000', NULL, 'Cj150', 'Conjunto Borboleta Vazada', 120.60, NULL, 'EM_ESTOQUE', 4),
+(37, 'BANHO_DOURADO', 'Conjunto', '2025-02-05 10:00:00.000000', '2025-02-05 10:00:00.000000', NULL, 'Cj275', 'Conjunto Gota Verde', 70.10, NULL, 'EM_ESTOQUE', 1),
+(38, 'BANHO_PRATA', 'Conjunto', '2025-02-05 10:00:00.000000', '2025-02-05 10:00:00.000000', NULL, 'Cj390', 'Conjunto Símbolo Paz', 48.00, NULL, 'EM_ESTOQUE', 2),
+(39, 'PRATA', 'Conjunto', '2025-02-05 10:00:00.000000', '2025-02-05 10:00:00.000000', NULL, 'Cj425', 'Conjunto Coração Batimento', 115.10, NULL, 'EM_ESTOQUE', 3);
+
+-- Piercings
+INSERT INTO produtos (id, acabamento, categoria, data_atualizacao, data_criacao, data_venda, id_referencia, nome, preco_custo, preco_venda, status, id_fornecedor) VALUES
+(40, 'ACO', 'Piercing', '2025-02-05 10:00:00.000000', '2025-02-05 10:00:00.000000', NULL, 'Pirc020', 'Piercing Mão Unida', 25.10, NULL, 'EM_ESTOQUE', 4),
+(41, 'BANHO_DOURADO', 'Piercing', '2025-02-05 10:00:00.000000', '2025-02-05 10:00:00.000000', NULL, 'Pirc140', 'Piercing Gota Dourada', 40.60, NULL, 'EM_ESTOQUE', 1),
+(42, 'ACO', 'Piercing', '2025-02-05 10:00:00.000000', '2025-02-05 10:00:00.000000', NULL, 'Pirc360', 'Piercing Estrela Tripla', 28.00, NULL, 'EM_ESTOQUE', 2);
+
+-- Pingentes
+INSERT INTO produtos (id, acabamento, categoria, data_atualizacao, data_criacao, data_venda, id_referencia, nome, preco_custo, preco_venda, status, id_fornecedor) VALUES
+(43, 'BANHO_DOURADO', 'Pingente', '2025-02-05 10:00:00.000000', '2025-02-05 10:00:00.000000', NULL, 'Pg030', 'Pingente Olho de Tigre', 45.10, NULL, 'EM_ESTOQUE', 3),
+(44, 'PRATA', 'Pingente', '2025-02-05 10:00:00.000000', '2025-02-05 10:00:00.000000', NULL, 'Pg170', 'Pingente Flor de Liz', 60.10, NULL, 'EM_ESTOQUE', 4),
+(45, 'BANHO_PRATA', 'Pingente', '2025-02-05 10:00:00.000000', '2025-02-05 10:00:00.000000', NULL, 'Pg290', 'Pingente Concha do Mar', 35.10, NULL, 'EM_ESTOQUE', 1),
+(46, 'BANHO_PRATA', 'Pingente', '2025-02-05 10:00:00.000000', '2025-02-05 10:00:00.000000', NULL, 'Pg410', 'Pingente Estrela Noturna', 33.00, NULL, 'EM_ESTOQUE', 2),
+(47, 'DOURADO', 'Pingente', '2025-02-05 10:00:00.000000', '2025-02-05 10:00:00.000000', NULL, 'Pg480', 'Pingente Círculo Solar', 848.00, NULL, 'EM_ESTOQUE', 3),
+(48, 'BANHO_DOURADO', 'Pingente', '2025-02-05 10:00:00.000000', '2025-02-05 10:00:00.000000', NULL, 'Pg125', 'Pingente Árvore', 50.10, NULL, 'EM_ESTOQUE', 4),
+(49, 'BANHO_DOURADO', 'Pingente', '2025-02-05 10:00:00.000000', '2025-02-05 10:00:00.000000', NULL, 'Pg245', 'Pingente Olho Grego', 76.60, NULL, 'EM_ESTOQUE', 1);
+
+-- Novos produtos para Fornecedor 1
 INSERT INTO produtos (id, acabamento, categoria, data_atualizacao, data_criacao, data_venda, id_referencia, nome, preco_custo, preco_venda, status, id_fornecedor) VALUES
 (50, 'BANHO_PRATA', 'Anel', '2025-09-09 09:23:00.000000', '2025-09-09 09:23:00.000000', NULL, 'An501', 'Anel Lua Crescente', 39.50, NULL, 'EM_ESTOQUE', 1),
 (51, 'BANHO_DOURADO', 'Berloque', '2025-09-09 09:23:00.000000', '2025-09-09 09:23:00.000000', NULL, 'Bq502', 'Berloque Árvore da Vida', 47.20, NULL, 'EM_ESTOQUE', 1),
@@ -91,7 +108,7 @@ INSERT INTO produtos (id, acabamento, categoria, data_atualizacao, data_criacao,
 (53, 'BANHO_PRATA', 'Brinco', '2025-09-09 09:23:00.000000', '2025-09-09 09:23:00.000000', NULL, 'Br504', 'Brinco Pétala Delicada', 62.30, NULL, 'EM_ESTOQUE', 1),
 (54, 'PRATA', 'Colar', '2025-09-09 09:23:00.000000', '2025-09-09 09:23:00.000000', NULL, 'Cl505', 'Colar Flor de Lótus', 94.80, NULL, 'EM_ESTOQUE', 1);
 
--- Novos produtos para Fornecedor 2 (id_fornecedor = 2)
+-- Novos produtos para Fornecedor 2
 INSERT INTO produtos (id, acabamento, categoria, data_atualizacao, data_criacao, data_venda, id_referencia, nome, preco_custo, preco_venda, status, id_fornecedor) VALUES
 (55, 'BANHO_DOURADO', 'Anel', '2025-09-09 09:23:00.000000', '2025-09-09 09:23:00.000000', NULL, 'An506', 'Anel Sol Brilhante', 42.70, NULL, 'EM_ESTOQUE', 2),
 (56, 'PRATA', 'Berloque', '2025-09-09 09:23:00.000000', '2025-09-09 09:23:00.000000', NULL, 'Bq507', 'Berloque Pássaro Livre', 58.90, NULL, 'EM_ESTOQUE', 2),
@@ -99,7 +116,7 @@ INSERT INTO produtos (id, acabamento, categoria, data_atualizacao, data_criacao,
 (58, 'BANHO_DOURADO', 'Brinco', '2025-09-09 09:23:00.000000', '2025-09-09 09:23:00.000000', NULL, 'Br509', 'Brinco Espiral Dourada', 67.10, NULL, 'EM_ESTOQUE', 2),
 (59, 'PRATA', 'Colar', '2025-09-09 09:23:00.000000', '2025-09-09 09:23:00.000000', NULL, 'Cl510', 'Colar Âncora do Mar', 88.20, NULL, 'EM_ESTOQUE', 2);
 
--- Novos produtos para Fornecedor 3 (id_fornecedor = 3)
+-- Novos produtos para Fornecedor 3
 INSERT INTO produtos (id, acabamento, categoria, data_atualizacao, data_criacao, data_venda, id_referencia, nome, preco_custo, preco_venda, status, id_fornecedor) VALUES
 (60, 'PRATA', 'Anel', '2025-09-09 09:23:00.000000', '2025-09-09 09:23:00.000000', NULL, 'An511', 'Anel Trança Celta', 68.30, NULL, 'EM_ESTOQUE', 3),
 (61, 'BANHO_PRATA', 'Berloque', '2025-09-09 09:23:00.000000', '2025-09-09 09:23:00.000000', NULL, 'Bq512', 'Berloque Lua Cheia', 49.50, NULL, 'EM_ESTOQUE', 3),
@@ -107,13 +124,10 @@ INSERT INTO produtos (id, acabamento, categoria, data_atualizacao, data_criacao,
 (63, 'DOURADO', 'Conjunto', '2025-09-09 09:23:00.000000', '2025-09-09 09:23:00.000000', NULL, 'Cj514', 'Conjunto Sol e Lua', 130.20, NULL, 'EM_ESTOQUE', 3),
 (64, 'ACO', 'Piercing', '2025-09-09 09:23:00.000000', '2025-09-09 09:23:00.000000', NULL, 'Pirc515', 'Piercing Círculo Aberto', 29.80, NULL, 'EM_ESTOQUE', 3);
 
--- Novos produtos para Fornecedor 4 (id_fornecedor = 4)
+-- Novos produtos para Fornecedor 4
 INSERT INTO produtos (id, acabamento, categoria, data_atualizacao, data_criacao, data_venda, id_referencia, nome, preco_custo, preco_venda, status, id_fornecedor) VALUES
 (65, 'BANHO_DOURADO', 'Anel', '2025-09-09 09:23:00.000000', '2025-09-09 09:23:00.000000', NULL, 'An516', 'Anel Flor Aberta', 52.40, NULL, 'EM_ESTOQUE', 4),
 (66, 'PRATA', 'Berloque', '2025-09-09 09:23:00.000000', '2025-09-09 09:23:00.000000', NULL, 'Bq517', 'Berloque Concha Brilhante', 61.20, NULL, 'EM_ESTOQUE', 4),
 (67, 'BANHO_PRATA', 'Conjunto', '2025-09-09 09:23:00.000000', '2025-09-09 09:23:00.000000', NULL, 'Cj518', 'Conjunto Estrelas Cadentes', 85.70, NULL, 'EM_ESTOQUE', 4),
 (68, 'BANHO_DOURADO', 'Pingente', '2025-09-09 09:23:00.000000', '2025-09-09 09:23:00.000000', NULL, 'Pg519', 'Pingente Coração Alado', 48.90, NULL, 'EM_ESTOQUE', 4),
 (69, 'PRATA', 'Colar', '2025-09-09 09:23:00.000000', '2025-09-09 09:23:00.000000', NULL, 'Cl520', 'Colar Pétalas Douradas', 79.60, NULL, 'EM_ESTOQUE', 4);
-
-
--- Dumping data for table vendas
