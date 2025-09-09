@@ -1,42 +1,59 @@
-SET FOREIGN_KEY_CHECKS = 0;
+-- Dumping data for table `fornecedores`
+LOCK TABLES `fornecedores` WRITE;
+/*!40000 ALTER TABLE `fornecedores` DISABLE KEYS */;
+INSERT INTO `fornecedores` VALUES (1,'12.345.678/0001-99','An','Bq','Bc','Br','Cl','Cj','Pc','Pg','Pl','2025-02-01 10:00:00.000000','2025-02-01 10:00:00.000000','Especializado em semi-joias de prata','Prata Elegante','(11) 99999-9999');
+INSERT INTO `fornecedores` VALUES (2,'98.765.432/0001-88','AnD','BqD','BcD','BrD','ClD','CjD','PcD','PgD','PlD','2025-02-01 11:00:00.000000','2025-02-01 11:00:00.000000','Foco em banho dourado','Dourado Fino','(21) 88888-8888');
+INSERT INTO `fornecedores` VALUES (3,'55.444.333/0001-77','AAn','ABq','ABc','ABr','ACl','ACj','APc','APg','APl','2025-02-01 12:00:00.000000','2025-02-01 12:00:00.000000','Produtos em aço','Aco Moderno','(31) 77777-7777');
+INSERT INTO `fornecedores` VALUES (4,'66.777.888/0001-66','MAn','MBq','MBc','MBr','MCl','MCj','MPc','MPg','MPl','2025-02-01 13:00:00.000000','2025-02-01 13:00:00.000000','Variedade de semi-joias','SemiJoias Lux','(41) 66666-6666');
+/*!40000 ALTER TABLE `fornecedores` ENABLE KEYS */;
+UNLOCK TABLES;
 
--- Limpeza na ordem segura (filhos -> pais)
-TRUNCATE TABLE `vendas`;
-TRUNCATE TABLE `produtos`;
-TRUNCATE TABLE `clientes`;
-TRUNCATE TABLE `fornecedores`;
+-- Dumping data for table `clientes`
+LOCK TABLES `clientes` WRITE;
+/*!40000 ALTER TABLE `clientes` DISABLE KEYS */;
+INSERT INTO `clientes` VALUES (1,'123.456.789-00','2025-02-10 10:00:00.000000','2025-02-10 10:00:00.000000','Cliente regular','cliente1@email.com','Maria Silva','(11) 91234-5678');
+INSERT INTO `clientes` VALUES (2,'987.654.321-00','2025-02-15 11:00:00.000000','2025-02-15 11:00:00.000000','Cliente fiel','','João Pereira','(21) 98765-4321');
+INSERT INTO `clientes` VALUES (3,'111.222.333-44','2025-02-20 12:00:00.000000','2025-02-20 12:00:00.000000','Compra frequente','','Ana Oliveira','(31) 91122-3344');
+INSERT INTO `clientes` VALUES (4,'444.555.666-77','2025-02-25 13:00:00.000000','2025-02-25 13:00:00.000000','','','Pedro Santos','(41) 94455-6677');
+INSERT INTO `clientes` VALUES (5,'777.888.999-00','2025-03-05 10:00:00.000000','2025-03-05 10:00:00.000000','Cliente regular','','Lucas Martins','(51) 97788-9990');
+INSERT INTO `clientes` VALUES (6,'000.111.222-33','2025-03-10 11:00:00.000000','2025-03-10 11:00:00.000000','Cliente fiel','','Gabriela Lima','(61) 90011-2233');
+INSERT INTO `clientes` VALUES (7,'333.444.555-66','2025-03-15 12:00:00.000000','2025-03-15 12:00:00.000000','Compra frequente','','Isabela Rodrigues','(71) 93344-5566');
+INSERT INTO `clientes` VALUES (8,'666.777.888-99','2025-03-20 13:00:00.000000','2025-03-20 13:00:00.000000','','','Olivia Ribeiro','(81) 96677-8899');
+/*!40000 ALTER TABLE `clientes` ENABLE KEYS */;
+UNLOCK TABLES;
 
--- SEED: FORNECEDORES
-INSERT INTO `fornecedores`
-(`id`, `cnpj`, `codigo_anel`, `codigo_berloque`, `codigo_bracelete`, `codigo_brinco`, `codigo_colar`, `codigo_conjunto`, `codigo_piercing`, `codigo_pingente`, `codigo_pulseira`, `data_atualizacao`, `data_criacao`, `descricao`, `nome`, `telefone`)
-VALUES
-(1,'12.345.678/0001-99','An','Bq','Bc','Br','Cl','Cj','Pc','Pg','Pl','2025-02-01 10:00:00','2025-02-01 10:00:00','Especializado em prata','Prata Elegante','(11) 99999-9999'),
-(2,'98.765.432/0001-55','AAn','ABq','ABc','ABr','ACl','ACj','APc','APg','APl','2025-02-02 12:00:00','2025-02-02 12:00:00','Aço e banho dourado','Aço Fino','(21) 98888-7777');
+-- Dumping data for table `produtos`
+LOCK TABLES `produtos` WRITE;
+/*!40000 ALTER TABLE `produtos` DISABLE KEYS */;
+INSERT INTO `produtos` VALUES (1,'PRATA','Anel','2025-02-05 10:00:00.000000','2025-02-05 10:00:00.000000',NULL,'An1001','Anel solitário prata',50.00,100.00,'EM_ESTOQUE',1);
+INSERT INTO `produtos` VALUES (2,'PRATA','Brinco','2025-02-10 11:00:00.000000','2025-02-10 11:00:00.000000','2025-02-15 12:00:00.000000','Br1002','Brinco argola prata',60.00,120.00,'VENDIDO',1);
+INSERT INTO `produtos` VALUES (3,'BANHO_DOURADO','Pulseira','2025-03-05 10:00:00.000000','2025-03-05 10:00:00.000000',NULL,'PlD2001','Pulseira banho dourado',40.00,80.00,'EM_ESTOQUE',2);
+INSERT INTO `produtos` VALUES (4,'BANHO_DOURADO','Colar','2025-03-10 11:00:00.000000','2025-03-10 11:00:00.000000','2025-03-15 12:00:00.000000','ClD2002','Colar banho dourado',70.00,140.00,'VENDIDO',2);
+INSERT INTO `produtos` VALUES (5,'ACO','Bracelete','2025-04-05 10:00:00.000000','2025-04-05 10:00:00.000000',NULL,'ABc3001','Bracelete aço',30.00,60.00,'EM_ESTOQUE',3);
+INSERT INTO `produtos` VALUES (6,'ACO','Berloque','2025-04-10 11:00:00.000000','2025-04-10 11:00:00.000000','2025-04-15 12:00:00.000000','ABq3002','Berloque aço',20.00,40.00,'VENDIDO',3);
+INSERT INTO `produtos` VALUES (7,'BANHO_PRATA','Pingente','2025-05-05 10:00:00.000000','2025-05-05 10:00:00.000000',NULL,'MPg4001','Pingente banho prata',25.00,50.00,'EM_ESTOQUE',4);
+INSERT INTO `produtos` VALUES (8,'BANHO_PRATA','Conjunto','2025-05-10 11:00:00.000000','2025-05-10 11:00:00.000000','2025-05-15 12:00:00.000000','MCj4002','Conjunto banho prata',80.00,160.00,'VENDIDO',4);
+INSERT INTO `produtos` VALUES (9,'PRATA','Piercing','2025-06-05 10:00:00.000000','2025-06-05 10:00:00.000000',NULL,'Pc1003','Piercing prata',15.00,30.00,'EM_ESTOQUE',1);
+INSERT INTO `produtos` VALUES (10,'PRATA','Pulseira','2025-06-10 11:00:00.000000','2025-06-10 11:00:00.000000','2025-06-15 12:00:00.000000','Pl1004','Pulseira prata',45.00,90.00,'VENDIDO',1);
+INSERT INTO `produtos` VALUES (11,'BANHO_DOURADO','Brinco','2025-07-05 10:00:00.000000','2025-07-05 10:00:00.000000',NULL,'BrD2003','Brinco banho dourado',55.00,110.00,'EM_ESTOQUE',2);
+INSERT INTO `produtos` VALUES (12,'BANHO_DOURADO','Anel','2025-07-10 11:00:00.000000','2025-07-10 11:00:00.000000','2025-07-15 12:00:00.000000','AnD2004','Anel banho dourado',35.00,70.00,'VENDIDO',2);
+INSERT INTO `produtos` VALUES (13,'ACO','Colar','2025-08-05 10:00:00.000000','2025-08-05 10:00:00.000000',NULL,'ACl3003','Colar aço',65.00,130.00,'EM_ESTOQUE',3);
+INSERT INTO `produtos` VALUES (14,'ACO','Pingente','2025-08-10 11:00:00.000000','2025-08-10 11:00:00.000000','2025-08-15 12:00:00.000000','APg3004','Pingente aço',25.00,50.00,'VENDIDO',3);
+INSERT INTO `produtos` VALUES (15,'BANHO_PRATA','Bracelete','2025-09-05 10:00:00.000000','2025-09-05 10:00:00.000000',NULL,'MBc4003','Bracelete banho prata',40.00,80.00,'EM_ESTOQUE',4);
+INSERT INTO `produtos` VALUES (16,'BANHO_PRATA','Berloque','2025-09-07 11:00:00.000000','2025-09-07 11:00:00.000000','2025-09-08 12:00:00.000000','MBq4004','Berloque banho prata',15.00,30.00,'VENDIDO',4);
+/*!40000 ALTER TABLE `produtos` ENABLE KEYS */;
+UNLOCK TABLES;
 
--- SEED: CLIENTES
-INSERT INTO `clientes`
-(`id`, `cpf`, `data_atualizacao`, `data_criacao`, `descricao`, `email`, `nome`, `telefone`)
-VALUES
-(1,'714.958.566-81','2025-02-07 12:00:00','2025-02-07 12:00:00','Cliente fiel',NULL,'Isabela Rodrigues','(53) 91701-3345'),
-(2,'419.917.261-44','2025-03-26 12:00:00','2025-03-26 12:00:00','Cliente fiel',NULL,'Carla Mendes','(18) 95192-9823'),
-(3,'773.361.328-75','2025-03-02 12:00:00','2025-03-02 12:00:00','Compra frequente',NULL,'Bruno Santos','(31) 99124-3561');
-
--- SEED: PRODUTOS (referenciam fornecedores)
-INSERT INTO `produtos`
-(`id`, `acabamento`, `categoria`, `data_atualizacao`, `data_criacao`, `data_venda`, `id_referencia`, `nome`, `preco_custo`, `preco_venda`, `status`, `id_fornecedor`)
-VALUES
-(1,'BANHO_PRATA','Anel','2025-04-01 10:00:00','2025-04-01 10:00:00',NULL,'An1001','Anel zirconia',120.00,NULL,'EM_ESTOQUE',1),
-(2,'ACO','Colar','2025-04-02 10:00:00','2025-04-02 10:00:00','2025-05-01 14:30:00','Cl2001','Colar minimalista',80.00,150.00,'VENDIDO',2),
-(3,'PRATA','Pulseira','2025-04-03 10:00:00','2025-04-03 10:00:00',NULL,'Pl3001','Pulseira elos',90.00,NULL,'EM_ESTOQUE',1);
-
--- SEED: VENDAS (referenciam clientes e produtos)
-INSERT INTO `vendas`
-(`id`, `data_atualizacao`, `data_criacao`, `data_vencimento`, `forma_pagamento`, `lucro`, `parcelas_pagas`, `preco_venda`, `status`, `total_parcelas`, `cliente_id`, `produto_id`)
-VALUES
-(1,'2025-05-01 14:31:00','2025-05-01 14:30:00','2025-06-01','PIX',70.00,1,150.00,'PAGO',1,2,2);
-
-SET FOREIGN_KEY_CHECKS = 1;
-
--- Observações:
--- 1) Este script é idempotente graças aos TRUNCATEs. Ao subir em produção, prefira migrações Flyway/Liquibase.
--- 2) Se desejar manter dados existentes e apenas inserir se não houver, troque TRUNCATE por INSERT ... ON DUPLICATE KEY UPDATE id=id;
+-- Dumping data for table `vendas`
+LOCK TABLES `vendas` WRITE;
+/*!40000 ALTER TABLE `vendas` DISABLE KEYS */;
+INSERT INTO `vendas` VALUES (1,'2025-02-15 12:00:00.000000','2025-02-28','PIX',60.00,1,120.00,'PAGO',1,1,2);
+INSERT INTO `vendas` VALUES (2,'2025-03-15 12:00:00.000000','2025-03-31','DINHEIRO',70.00,1,140.00,'PAGO',1,2,4);
+INSERT INTO `vendas` VALUES (3,'2025-04-15 12:00:00.000000','2025-04-30','CARTAO_CREDITO',20.00,2,40.00,'PAGO',2,3,6);
+INSERT INTO `vendas` VALUES (4,'2025-05-15 12:00:00.000000','2025-05-31','PIX',80.00,1,160.00,'PAGO',1,4,8);
+INSERT INTO `vendas` VALUES (5,'2025-06-15 12:00:00.000000','2025-06-30','DINHEIRO',45.00,1,90.00,'PAGO',1,5,10);
+INSERT INTO `vendas` VALUES (6,'2025-07-15 12:00:00.000000','2025-07-31','CARTAO_DEBITO',35.00,1,70.00,'PAGO',1,6,12);
+INSERT INTO `vendas` VALUES (7,'2025-08-15 12:00:00.000000','2025-08-31','PIX',25.00,1,50.00,'PAGO',1,7,14);
+INSERT INTO `vendas` VALUES (8,'2025-09-08 12:00:00.000000','2025-09-30','DINHEIRO',15.00,1,30.00,'PAGO',1,8,16);
+/*!40000 ALTER TABLE `vendas` ENABLE KEYS */;
+UNLOCK TABLES;
