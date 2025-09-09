@@ -83,4 +83,37 @@ INSERT INTO produtos (id, acabamento, categoria, data_atualizacao, data_criacao,
 INSERT INTO produtos (id, acabamento, categoria, data_atualizacao, data_criacao, data_venda, id_referencia, nome, preco_custo, preco_venda, status, id_fornecedor) VALUES (48,'BANHO_DOURADO','Pingente','2025-02-05 10:00:00.000000','2025-02-05 10:00:00.000000',NULL,'Pg125','Pingente Árvore',50.10,NULL,'EM_ESTOQUE',4);
 INSERT INTO produtos (id, acabamento, categoria, data_atualizacao, data_criacao, data_venda, id_referencia, nome, preco_custo, preco_venda, status, id_fornecedor) VALUES (49,'BANHO_DOURADO','Pingente','2025-02-05 10:00:00.000000','2025-02-05 10:00:00.000000',NULL,'Pg245','Pingente Olho Grego',76.60,NULL,'EM_ESTOQUE',1);
 
+-- Novos produtos para Fornecedor 1 (id_fornecedor = 1)
+INSERT INTO produtos (id, acabamento, categoria, data_atualizacao, data_criacao, data_venda, id_referencia, nome, preco_custo, preco_venda, status, id_fornecedor) VALUES
+(50, 'BANHO_PRATA', 'Anel', '2025-09-09 09:23:00.000000', '2025-09-09 09:23:00.000000', NULL, 'An501', 'Anel Lua Crescente', 39.50, NULL, 'EM_ESTOQUE', 1),
+(51, 'BANHO_DOURADO', 'Berloque', '2025-09-09 09:23:00.000000', '2025-09-09 09:23:00.000000', NULL, 'Bq502', 'Berloque Árvore da Vida', 47.20, NULL, 'EM_ESTOQUE', 1),
+(52, 'PRATA', 'Bracelete', '2025-09-09 09:23:00.000000', '2025-09-09 09:23:00.000000', NULL, 'Bc503', 'Bracelete Linhas Infinitas', 89.90, NULL, 'EM_ESTOQUE', 1),
+(53, 'BANHO_PRATA', 'Brinco', '2025-09-09 09:23:00.000000', '2025-09-09 09:23:00.000000', NULL, 'Br504', 'Brinco Pétala Delicada', 62.30, NULL, 'EM_ESTOQUE', 1),
+(54, 'PRATA', 'Colar', '2025-09-09 09:23:00.000000', '2025-09-09 09:23:00.000000', NULL, 'Cl505', 'Colar Flor de Lótus', 94.80, NULL, 'EM_ESTOQUE', 1);
+
+-- Novos produtos para Fornecedor 2 (id_fornecedor = 2)
+INSERT INTO produtos (id, acabamento, categoria, data_atualizacao, data_criacao, data_venda, id_referencia, nome, preco_custo, preco_venda, status, id_fornecedor) VALUES
+(55, 'BANHO_DOURADO', 'Anel', '2025-09-09 09:23:00.000000', '2025-09-09 09:23:00.000000', NULL, 'An506', 'Anel Sol Brilhante', 42.70, NULL, 'EM_ESTOQUE', 2),
+(56, 'PRATA', 'Berloque', '2025-09-09 09:23:00.000000', '2025-09-09 09:23:00.000000', NULL, 'Bq507', 'Berloque Pássaro Livre', 58.90, NULL, 'EM_ESTOQUE', 2),
+(57, 'BANHO_PRATA', 'Bracelete', '2025-09-09 09:23:00.000000', '2025-09-09 09:23:00.000000', NULL, 'Bc508', 'Bracelete Ondas Marinhas', 78.40, NULL, 'EM_ESTOQUE', 2),
+(58, 'BANHO_DOURADO', 'Brinco', '2025-09-09 09:23:00.000000', '2025-09-09 09:23:00.000000', NULL, 'Br509', 'Brinco Espiral Dourada', 67.10, NULL, 'EM_ESTOQUE', 2),
+(59, 'PRATA', 'Colar', '2025-09-09 09:23:00.000000', '2025-09-09 09:23:00.000000', NULL, 'Cl510', 'Colar Âncora do Mar', 88.20, NULL, 'EM_ESTOQUE', 2);
+
+-- Novos produtos para Fornecedor 3 (id_fornecedor = 3)
+INSERT INTO produtos (id, acabamento, categoria, data_atualizacao, data_criacao, data_venda, id_referencia, nome, preco_custo, preco_venda, status, id_fornecedor) VALUES
+(60, 'PRATA', 'Anel', '2025-09-09 09:23:00.000000', '2025-09-09 09:23:00.000000', NULL, 'An511', 'Anel Trança Celta', 68.30, NULL, 'EM_ESTOQUE', 3),
+(61, 'BANHO_PRATA', 'Berloque', '2025-09-09 09:23:00.000000', '2025-09-09 09:23:00.000000', NULL, 'Bq512', 'Berloque Lua Cheia', 49.50, NULL, 'EM_ESTOQUE', 3),
+(62, 'PRATA', 'Bracelete', '2025-09-09 09:23:00.000000', '2025-09-09 09:23:00.000000', NULL, 'Bc513', 'Bracelete Coração Gravado', 102.60, NULL, 'EM_ESTOQUE', 3),
+(63, 'DOURADO', 'Conjunto', '2025-09-09 09:23:00.000000', '2025-09-09 09:23:00.000000', NULL, 'Cj514', 'Conjunto Sol e Lua', 130.20, NULL, 'EM_ESTOQUE', 3),
+(64, 'ACO', 'Piercing', '2025-09-09 09:23:00.000000', '2025-09-09 09:23:00.000000', NULL, 'Pirc515', 'Piercing Círculo Aberto', 29.80, NULL, 'EM_ESTOQUE', 3);
+
+-- Novos produtos para Fornecedor 4 (id_fornecedor = 4)
+INSERT INTO produtos (id, acabamento, categoria, data_atualizacao, data_criacao, data_venda, id_referencia, nome, preco_custo, preco_venda, status, id_fornecedor) VALUES
+(65, 'BANHO_DOURADO', 'Anel', '2025-09-09 09:23:00.000000', '2025-09-09 09:23:00.000000', NULL, 'An516', 'Anel Flor Aberta', 52.40, NULL, 'EM_ESTOQUE', 4),
+(66, 'PRATA', 'Berloque', '2025-09-09 09:23:00.000000', '2025-09-09 09:23:00.000000', NULL, 'Bq517', 'Berloque Concha Brilhante', 61.20, NULL, 'EM_ESTOQUE', 4),
+(67, 'BANHO_PRATA', 'Conjunto', '2025-09-09 09:23:00.000000', '2025-09-09 09:23:00.000000', NULL, 'Cj518', 'Conjunto Estrelas Cadentes', 85.70, NULL, 'EM_ESTOQUE', 4),
+(68, 'BANHO_DOURADO', 'Pingente', '2025-09-09 09:23:00.000000', '2025-09-09 09:23:00.000000', NULL, 'Pg519', 'Pingente Coração Alado', 48.90, NULL, 'EM_ESTOQUE', 4),
+(69, 'PRATA', 'Colar', '2025-09-09 09:23:00.000000', '2025-09-09 09:23:00.000000', NULL, 'Cl520', 'Colar Pétalas Douradas', 79.60, NULL, 'EM_ESTOQUE', 4);
+
+
 -- Dumping data for table vendas
