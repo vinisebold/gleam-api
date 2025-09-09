@@ -499,14 +499,6 @@ INSERT INTO vendas (data_criacao, data_vencimento, forma_pagamento, lucro, parce
                     total_parcelas, cliente_id, produto_id)
 VALUES ('2025-05-23 16:00:00.000000', '2025-05-31', 'DINHEIRO', 33.00, 1, 66.00, 'PAGO', 1, 13, 46);
 UPDATE produtos
-SET data_venda='2025-05-26 14:00:00.000000',
-    preco_venda=1696.00,
-    status='VENDIDO'
-WHERE id = 47;
-INSERT INTO vendas (data_criacao, data_vencimento, forma_pagamento, lucro, parcelas_pagas, preco_venda, status,
-                    total_parcelas, cliente_id, produto_id)
-VALUES ('2025-05-26 14:00:00.000000', '2025-06-15', 'CARTAO_CREDITO', 848.00, 4, 1696.00, 'PAGO', 4, 14, 47);
-UPDATE produtos
 SET data_venda='2025-05-30 16:00:00.000000',
     preco_venda=153.20,
     status='VENDIDO'
