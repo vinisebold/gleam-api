@@ -6,10 +6,11 @@ DELETE FROM fornecedores;
 
 -- Insert data into fornecedores
 INSERT INTO fornecedores (id, cnpj, codigo_anel, codigo_berloque, codigo_bracelete, codigo_brinco, codigo_colar, codigo_conjunto, codigo_piercing, codigo_pingente, codigo_pulseira, data_atualizacao, data_criacao, descricao, nome, telefone) VALUES
-(1, '12.345.678/0001-90', 'An', 'Bq', 'Bc', 'Br', 'Cl', 'Cj', 'Pirc', 'Pg', 'Pl', '2025-02-01 10:00:00.000000', '2025-02-01 10:00:00.000000', 'Especializado em semi-joias de prata.', 'Fornecedor A', '(48) 3456-7890'),
-(2, '23.456.789/0001-01', 'An', 'Bq', 'Bc', 'Br', 'Cl', 'Cj', 'Pirc', 'PG', 'Pl', '2025-02-01 11:00:00.000000', '2025-02-01 11:00:00.000000', 'Fabricação de joias finas em ouro 18k', 'Fornecedor B', '(47) 2345-6789'),
-(3, '34.567.890/0001-12', 'An', 'Bq', 'Bc', 'Br', 'Cl', 'Cj', 'Pirc', 'PG', 'Pl', '2025-02-01 12:00:00.000000', '2025-02-01 12:00:00.000000', 'bijuterias e semi-joias.', 'Fornecedor C', '(55) 4567-8901'),
-(4, '45.678.901/0001-23', 'An', 'Bq', 'Bc', 'Br', 'Cl', 'Cj', 'Pirc', 'PG', 'Pl', '2025-02-01 13:00:00.000000', '2025-02-01 13:00:00.000000', 'joias de prata e ouro branco.', 'Fornecedor D', '(47) 3456-1234');
+(1, '12.345.678/0001-90', 'An', 'Bq', 'Bc', 'Br', 'Cl', 'Cj', 'Pirc', 'Pg', 'Pl', '2025-02-01 10:00:00.000000', '2025-02-01 10:00:00.000000', 'Especializado em semi-joias de prata.', 'Fornecedor A', '(48) 93456-7890'),
+(2, '23.456.789/0001-01', 'An', 'Bq', 'Bc', 'Br', 'Cl', 'Cj', 'Pirc', 'Pg', 'Pl', '2025-02-01 11:00:00.000000', '2025-02-01 11:00:00.000000', 'Fabricação de joias finas em ouro 18k', 'Fornecedor B', '(47) 92345-6789'),
+(3, '34.567.890/0001-12', 'An', 'Bq', 'Bc', 'Br', 'Cl', 'Cj', 'Pirc', 'Pg', 'Pl', '2025-02-01 12:00:00.000000', '2025-02-01 12:00:00.000000', 'bijuterias e semi-joias.', 'Fornecedor C', '(55) 94567-8901'),
+(4, '45.678.901/0001-23', 'An', 'Bq', 'Bc', 'Br', 'Cl', 'Cj', 'Pirc', 'Pg', 'Pl', '2025-02-01 13:00:00.000000', '2025-02-01 13:00:00.000000', 'joias de prata e ouro branco.', 'Fornecedor D', '(47) 93456-1234'),
+(5, '15.475.960/0001-51', 'An', 'Bq', 'Bc', 'Br', 'Cl', 'Cj', 'Pirc', 'Pg', 'Pl', '2025-02-01 13:00:00.000000', '2025-02-01 13:00:00.000000', 'bijuterias e joias de prata', 'Fornecedor E', '(48) 99956-1234');
 
 -- Insert data into clientes
 INSERT INTO clientes (id, cpf, data_atualizacao, data_criacao, descricao, email, nome, telefone) VALUES
@@ -33,7 +34,7 @@ INSERT INTO produtos (id, acabamento, categoria, data_atualizacao, data_criacao,
 (2, 'BANHO_DOURADO', 'Anel', '2025-02-05 10:00:00.000000', '2025-02-05 10:00:00.000000', NULL, 'An123', 'Anel Coração Triplo', 45.10, NULL, 'EM_ESTOQUE', 2),
 (3, 'PRATA', 'Anel', '2025-02-05 10:00:00.000000', '2025-02-05 10:00:00.000000', NULL, 'An456', 'Anel Nó da Amizade', 65.60, NULL, 'EM_ESTOQUE', 3),
 (4, 'BANHO_DOURADO', 'Anel', '2025-02-05 10:00:00.000000', '2025-02-05 10:00:00.000000', NULL, 'An078', 'Anel Coroa Delicada', 50.10, NULL, 'EM_ESTOQUE', 4),
-(5, 'BANHO_PRATA', 'Anel', '2025-02-05 10:00:00.000000', '2025-02-05 10:00:00.000000', NULL, 'An321', 'Anel Estrela Cadente', 35.00, NULL, 'EM_ESTOQUE', 1),
+(5, 'BANHO_PRATA', 'Anel', '2025-02-05 10:00:00.000000', '2025-02-05 10:00:00.000000', '2025-09-09 10:40:22.838519', 'An321', 'Anel Estrela Cadente', 35.00, 120.00, 'VENDIDO', 1),
 (6, 'PRATA', 'Anel', '2025-02-05 10:00:00.000000', '2025-02-05 10:00:00.000000', NULL, 'An499', 'Anel Espiral da Vida', 70.60, NULL, 'EM_ESTOQUE', 2);
 
 -- Berloques
@@ -131,3 +132,6 @@ INSERT INTO produtos (id, acabamento, categoria, data_atualizacao, data_criacao,
 (67, 'BANHO_PRATA', 'Conjunto', '2025-09-09 09:23:00.000000', '2025-09-09 09:23:00.000000', NULL, 'Cj518', 'Conjunto Estrelas Cadentes', 85.70, NULL, 'EM_ESTOQUE', 4),
 (68, 'BANHO_DOURADO', 'Pingente', '2025-09-09 09:23:00.000000', '2025-09-09 09:23:00.000000', NULL, 'Pg519', 'Pingente Coração Alado', 48.90, NULL, 'EM_ESTOQUE', 4),
 (69, 'PRATA', 'Colar', '2025-09-09 09:23:00.000000', '2025-09-09 09:23:00.000000', NULL, 'Cl520', 'Colar Pétalas Douradas', 79.60, NULL, 'EM_ESTOQUE', 4);
+
+INSERT INTO vendas (data_criacao,data_vencimento,forma_pagamento,lucro,parcelas_pagas,preco_venda,status,total_parcelas,cliente_id,produto_id) VALUES
+	 ('2025-09-09 10:40:22.838519','2025-09-30','CARTAO_DEBITO',85.00,2,120.00,'PAGO',2,2,5);
