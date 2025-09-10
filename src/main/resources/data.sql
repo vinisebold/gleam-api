@@ -35,7 +35,8 @@ VALUES (1, '111.222.333-44', '2025-02-10 10:00:00.000000', '2025-02-10 10:00:00.
         'Eduarda Ferreira Gomes', '(51) 91234-5678'),
        (6, '666.777.888-99', '2025-03-10 11:00:00.000000', '2025-03-10 11:00:00.000000', '', 'f.rocha@email.br',
         'Felipe Martins Rocha', '(61) 3333-2222'),
-
+       (7, '777.888.999-00', '2025-03-15 12:00:00.000000', '2025-03-15 12:00:00.000000', '',
+        'giovana.alves@provedor.com', 'Giovana Almeida Alves', '(71) 98888-7777'),
        (8, '888.999.000-11', '2025-03-20 13:00:00.000000', '2025-03-20 13:00:00.000000', '', 'heitor.rp@email.net',
         'Heitor Rodrigues Pinto', '(81) 5555-1111'),
        (9, '999.000.111-22', '2025-03-25 14:00:00.000000', '2025-03-25 14:00:00.000000', '',
@@ -46,8 +47,8 @@ VALUES (1, '111.222.333-44', '2025-02-10 10:00:00.000000', '2025-02-10 10:00:00.
         'larissa.dias@emailserver.com', 'Larissa Ribeiro Dias', '(31) 98877-6655'),
        (12, '303.030.303-03', '2025-04-10 17:00:00.000000', '2025-04-10 17:00:00.000000', '', 'mateus.borges@email.br',
         'Mateus Henrique Borges', '(41) 91122-3344');
-        -- Insert data into produtos
-        -- Anéis
+-- Insert data into produtos
+-- Anéis
 INSERT INTO produtos (id, acabamento, categoria, data_atualizacao, data_criacao, data_venda, id_referencia, nome,
                       preco_custo, preco_venda, status, id_fornecedor)
 VALUES (1, 'BANHO_PRATA', 'Anel', '2025-02-05 10:00:00.000000', '2025-02-05 10:00:00.000000', NULL, 'An002',
@@ -62,7 +63,7 @@ VALUES (1, 'BANHO_PRATA', 'Anel', '2025-02-05 10:00:00.000000', '2025-02-05 10:0
         '2025-09-09 10:40:22.838519', 'An321', 'Anel Estrela Cadente', 35.00, 120.00, 'VENDIDO', 1),
        (6, 'PRATA', 'Anel', '2025-02-05 10:00:00.000000', '2025-02-05 10:00:00.000000', NULL, 'An499',
         'Anel Espiral da Vida', 70.60, NULL, 'EM_ESTOQUE', 2);
-        -- Berloques
+-- Berloques
 INSERT INTO produtos (id, acabamento, categoria, data_atualizacao, data_criacao, data_venda, id_referencia, nome,
                       preco_custo, preco_venda, status, id_fornecedor)
 VALUES (7, 'BANHO_PRATA', 'Berloque', '2025-02-05 10:00:00.000000', '2025-02-05 10:00:00.000000', NULL, 'Bq011',
@@ -225,13 +226,20 @@ VALUES (65, 'BANHO_DOURADO', 'Anel', '2025-09-09 09:23:00.000000', '2025-09-09 0
 INSERT INTO clientes (id, cpf, data_atualizacao, data_criacao, descricao, email, nome, telefone)
 VALUES (13, '404.040.404-04', '2025-04-15 10:00:00.000000', '2025-04-15 10:00:00.000000', '',
         'natalia.moraes@email.com', 'Natalia Moraes Silva', '(51) 97788-5544'),
-
-
-
-
-
-
-
+       (14, '505.050.505-05', '2025-05-05 11:00:00.000000', '2025-05-05 11:00:00.000000', '',
+        'otavio.souza@provedor.net', 'Otavio Souza Lima', '(61) 92233-4455'),
+       (15, '606.060.606-06', '2025-05-15 12:00:00.000000', '2025-05-15 12:00:00.000000', '',
+        'paula.fernandes@email.org', 'Paula Fernandes Rocha', '(71) 95566-7788'),
+       (16, '707.070.707-07', '2025-06-05 13:00:00.000000', '2025-06-05 13:00:00.000000', '',
+        'quintino.alves@emailserver.com', 'Quintino Alves Pinto', '(81) 94455-6677'),
+       (17, '808.080.808-08', '2025-06-15 14:00:00.000000', '2025-06-15 14:00:00.000000', '', 'rafaela.castro@mail.com',
+        'Rafaela Castro Gomes', '(91) 93344-5566'),
+       (18, '909.090.909-09', '2025-07-05 15:00:00.000000', '2025-07-05 15:00:00.000000', '', 'sandro.victor@email.br',
+        'Sandro Victor Borges', '(11) 96677-8899'),
+       (19, '010.101.010-10', '2025-07-15 16:00:00.000000', '2025-07-15 16:00:00.000000', '',
+        'tatiana.dias@provedor.com', 'Tatiana Dias Almeida', '(21) 97788-9900'),
+       (20, '111.212.121-11', '2025-08-05 17:00:00.000000', '2025-08-05 17:00:00.000000', '',
+        'ulisses.rodrigues@email.net', 'Ulisses Rodrigues Fernandes', '(31) 98899-0011'),
        (21, '212.121.212-12', '2025-08-15 18:00:00.000000', '2025-08-15 18:00:00.000000', '',
         'valeria.santos@mailservice.org', 'Valeria Santos Ribeiro', '(41) 99900-1122'),
        (22, '313.131.313-13', '2025-09-01 19:00:00.000000', '2025-09-01 19:00:00.000000', '',
