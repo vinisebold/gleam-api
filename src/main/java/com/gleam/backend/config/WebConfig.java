@@ -20,7 +20,7 @@ public class WebConfig implements WebMvcConfigurer {
                         "http://localhost:4200",
                         "https://xjzkzx-4200.csb.app",
                         "https://gleam.software",
-                        "https://gleam-tcc.vercel.app",
+                        "https://gleam-tcc.vercel.app"
                 )
                 // Define os métodos HTTP permitidos (GET, POST, PUT, DELETE, etc.)
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
