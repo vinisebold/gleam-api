@@ -12,8 +12,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 
 /**
- * Controller REST para gerir a entidade Cliente.
- * Expõe os endpoints da API para todas as operações de CRUD relacionadas a clientes.
+ * Controller REST para a gestão de Clientes.
+ * Expõe os endpoints da API para as operações de CRUD (Criar, Ler, Atualizar, Apagar)
+ * relacionadas a clientes.
  */
 @RestController
 @RequestMapping("/api/clientes")
@@ -23,9 +24,11 @@ public class ClienteController {
     private final ClienteService clienteService;
 
     /**
-     * Endpoint para criar um novo cliente.
-     * @param dto O corpo da requisição com os dados do cliente.
-     * @return Resposta 201 Created com o DTO do novo cliente no corpo e a URI no cabeçalho Location.
+     * POST /api/clientes: cria um novo cliente.
+     *
+     * @param dto O corpo da requisição com os dados do cliente a ser criado.
+     * @return {@link ResponseEntity} com status 201 (Created), o DTO do novo cliente no corpo,
+     * e a URI do novo recurso no cabeçalho 'Location'.
      */
     @PostMapping
     public ResponseEntity<ClienteDTO> createCliente(@RequestBody ClienteDTO dto) {
@@ -36,9 +39,10 @@ public class ClienteController {
     }
 
     /**
-     * Endpoint para listar todos os clientes de forma paginada.
-     * @param pageable Parâmetros de paginação (ex: ?page=0&size=10&sort=nome,asc).
-     * @return Uma página (Page) de ClienteDTOs.
+     * GET /api/clientes: lista todos os clientes de forma paginada.
+     *
+     * @param pageable Parâmetros de paginação.
+     * @return {@link ResponseEntity} com status 200 (OK) e uma página (Page) de ClienteDTOs no corpo.
      */
     @GetMapping
     public ResponseEntity<Page<ClienteDTO>> getAllClientes(Pageable pageable) {
@@ -47,9 +51,10 @@ public class ClienteController {
     }
 
     /**
-     * Endpoint para buscar um cliente específico pelo seu ID.
-     * @param id O ID do cliente.
-     * @return O ClienteDTO correspondente.
+     * GET /api/clientes/{‘id’}: busca um cliente específico pelo seu ‘ID’.
+     *
+     * @param id O ID do cliente a ser procurado.
+     * @return {@link ResponseEntity} com status 200 (OK) e o ClienteDTO correspondente no corpo.
      */
     @GetMapping("/{id}")
     public ResponseEntity<ClienteDTO> getClienteById(@PathVariable Long id) {
@@ -58,10 +63,11 @@ public class ClienteController {
     }
 
     /**
-     * Endpoint para atualizar um cliente existente.
-     * @param id O ID do cliente a ser atualizado.
-     * @param dto O corpo da requisição com os novos dados.
-     * @return O ClienteDTO atualizado.
+     * PUT /api/clientes/{id}: atualiza um cliente existente.
+     *
+     * @param id  O ‘ID’ do cliente a ser atualizado.
+     * @param dto O corpo da requisição com os novos dados do cliente.
+     * @return {@link ResponseEntity} com status 200 (OK) e o ClienteDTO atualizado no corpo.
      */
     @PutMapping("/{id}")
     public ResponseEntity<ClienteDTO> updateCliente(@PathVariable Long id, @RequestBody ClienteDTO dto) {
@@ -70,9 +76,10 @@ public class ClienteController {
     }
 
     /**
-     * Endpoint para apagar um cliente.
+     * DELETE /api/clientes/{id}: apaga um cliente.
+     *
      * @param id O ID do cliente a ser apagado.
-     * @return Resposta 204 No Content, indicando sucesso sem corpo de resposta.
+     * @return {@link ResponseEntity} com status 204 (No Content).
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCliente(@PathVariable Long id) {

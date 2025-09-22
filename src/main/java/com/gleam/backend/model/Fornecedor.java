@@ -10,8 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Entidade que representa um Fornecedor de produtos.
- * Contém informações cadastrais e os prefixos de código para cada categoria de produto.
+ * Representa um fornecedor de produtos.
+ * Armazena informações cadastrais e os prefixos de código utilizados para
+ * gerar o ‘ID’ de referência de cada produto associado a ele.
  */
 @Data
 @Entity
@@ -19,7 +20,7 @@ import java.util.List;
 public class Fornecedor {
 
     /**
-     * Identificador único do fornecedor, gerado automaticamente.
+     * Identificador único do fornecedor (chave primária).
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,7 +32,7 @@ public class Fornecedor {
     private String nome;
 
     /**
-     * CNPJ do fornecedor, para fins fiscais e de identificação.
+     * CNPJ do fornecedor.
      */
     private String cnpj;
 
@@ -41,15 +42,13 @@ public class Fornecedor {
     private String telefone;
 
     /**
-     * Um campo de texto livre para anotações ou descrição do fornecedor.
+     * Campo para anotações ou descrição do fornecedor.
      */
     private String descricao;
 
-    // --- Campos de Auditoria ---
-
     /**
-     * Data e hora exatas em que o fornecedor foi registado no sistema.
-     * Gerado automaticamente pelo Hibernate na criação.
+     * Data e hora do registro do fornecedor no sistema.
+     * Gerado automaticamente na criação.
      */
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
@@ -57,76 +56,42 @@ public class Fornecedor {
 
     /**
      * Data e hora da última atualização dos dados do fornecedor.
-     * Atualizado automaticamente pelo Hibernate em cada modificação.
+     * Atualizado automaticamente em cada modificação.
      */
     @UpdateTimestamp
     @Column(nullable = false)
     private LocalDateTime dataAtualizacao;
 
-    // --- Campos de Prefixo de Código ---
-
     /**
-     * Prefixo de código utilizado para a categoria "Anel". Ex: "FORN-AN".
+     * Prefixos de código utilizados para gerar o ID de referência dos produtos.
+     * Cada prefixo está associado a uma categoria de produto.
+     * Exemplo: "AN" para a categoria "Anel".
      */
     @Column(name = "codigo_anel")
     private String codigoAnel;
-
-    /**
-     * Prefixo de código utilizado para a categoria "Bracelete".
-     */
     @Column(name = "codigo_bracelete")
     private String codigoBracelete;
-
-    /**
-     * Prefixo de código utilizado para a categoria "Colar".
-     */
     @Column(name = "codigo_colar")
     private String codigoColar;
-
-    /**
-     * Prefixo de código utilizado para a categoria "Brinco".
-     */
     @Column(name = "codigo_brinco")
     private String codigoBrinco;
-
-    /**
-     * Prefixo de código utilizado para a categoria "Pulseira".
-     */
     @Column(name = "codigo_pulseira")
     private String codigoPulseira;
-
-    /**
-     * Prefixo de código utilizado para a categoria "Pingente".
-     */
     @Column(name = "codigo_pingente")
     private String codigoPingente;
-
-    /**
-     * Prefixo de código utilizado para a categoria "Conjunto".
-     */
     @Column(name = "codigo_conjunto")
     private String codigoConjunto;
-
-    /**
-     * Prefixo de código utilizado para a categoria "Berloque".
-     */
     @Column(name = "codigo_berloque")
     private String codigoBerloque;
-
-    /**
-     * Prefixo de código utilizado para a categoria "Piercing".
-     */
     @Column(name = "codigo_piercing")
     private String codigoPiercing;
 
-    // --- Relacionamentos ---
-
     /**
-     * Lista de todos os produtos associados a este fornecedor.
-     * `mappedBy = "fornecedor"` indica que a entidade Produto é a "dona" da relação.
-     * `cascade = CascadeType.ALL` garante que as operações (salvar, apagar) no fornecedor sejam propagadas para os seus produtos.
-     * `orphanRemoval = true` garante que um produto seja apagado se for removido desta lista.
-     * Nota: É importante ter cuidado ao expor esta lista diretamente na API para evitar loops de serialização.
+     * Lista de produtos associados a este fornecedor.
+     * A anotação 'mappedBy' indica que a entidade 'Produto' gerencia este relacionamento.
+     * O 'cascade' propaga operações (salvar, apagar) para os produtos associados.
+     * O 'orphanRemoval' remove produtos que não estão mais nesta lista.
+     * Nota: Evitar expor esta lista diretamente na API para prevenir ‘loops’ de serialização.
      */
     @OneToMany(mappedBy = "fornecedor", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Produto> produtos = new ArrayList<>();

@@ -8,8 +8,20 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
- * Record para representar um Produto na API.
- * Usado tanto para criar/atualizar (Request) quanto para exibir (Response).
+ * DTO para a entidade Produto.
+ * Usado tanto para enviar dados para a API (request) quanto para receber (response).
+ *
+ * @param id O identificador único do produto.
+ * @param nome O nome do produto.
+ * @param precoVenda O preço de venda ao cliente.
+ * @param precoCusto O preço de custo do produto.
+ * @param categoria A categoria do produto (ex: "Anel").
+ * @param acabamento O tipo de acabamento do material.
+ * @param idReferencia O código de referência único do produto (sem o prefixo do fornecedor).
+ * @param idFornecedor O ‘ID’ do fornecedor associado.
+ * @param status O status atual do produto no inventário.
+ * @param dataCriacao A data de registo do produto.
+ * @param dataAtualizacao A data da última atualização.
  */
 public record ProdutoDTO(
         Long id,
@@ -25,7 +37,8 @@ public record ProdutoDTO(
         LocalDateTime dataAtualizacao
 ) {
     /**
-     * Construtor para converter uma entidade Produto em um ProdutoDTO.
+     * Construtor de conversão para criar um DTO a partir de uma entidade Produto.
+     * @param produto A entidade {@link Produto} de origem.
      */
     public ProdutoDTO(Produto produto) {
         this(

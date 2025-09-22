@@ -17,6 +17,11 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+/**
+ * Encapsula a lógica de negócio para a gestão de Vendas.
+ * Orquestra as operações que envolvem produtos e clientes durante o
+ * registo, pagamento e cancelamento de transações.
+ */
 @Service
 @RequiredArgsConstructor
 public class VendaService {
@@ -25,11 +30,17 @@ public class VendaService {
     private final ProdutoRepository produtoRepository;
     private final ClienteRepository clienteRepository;
 
+    /**
+     * Lista as vendas de forma paginada, com a opção de filtrar por status.
+     *
+     * @param pageable Objeto com as informações de paginação.
+     * @param status   O {@link StatusVenda} para filtrar os resultados (opcional).
+     * @return Uma {@link Page} de {@link VendaResponseDto} com as vendas encontradas.
+     */
     @Transactional(readOnly = true)
     public Page<VendaResponseDto> findAll(Pageable pageable, StatusVenda status) {
         Page<Venda> vendas;
         if (status != null) {
-            // Futuramente, criar este método no Repository para otimizar
             vendas = vendaRepository.findByStatus(status, pageable);
         } else {
             vendas = vendaRepository.findAll(pageable);
@@ -37,34 +48,45 @@ public class VendaService {
         return vendas.map(VendaResponseDto::new);
     }
 
+    /**
+     * Regista uma nova venda no sistema.
+     * Esta operação é transacional e atómica: atualiza o status do produto para VENDIDO
+     * e cria o registo da venda.
+     *
+     * @param dto O {@link RegistrarVendaRequestDto} com os detalhes da transação.
+     * @return O {@link VendaResponseDto} da venda recém-criada.
+     * @throws EntityNotFoundException se o produto ou o cliente não forem encontrados.
+     * @throws IllegalStateException   se o produto não estiver disponível para venda (não está EM_ESTOQUE).
+     */
     @Transactional
     public VendaResponseDto registrarVenda(RegistrarVendaRequestDto dto) {
-        // 1. Buscar as entidades principais
         Produto produto = produtoRepository.findById(dto.produtoId())
                 .orElseThrow(() -> new EntityNotFoundException("Produto com ID " + dto.produtoId() + " não encontrado."));
-
         Cliente cliente = clienteRepository.findById(dto.clienteId())
                 .orElseThrow(() -> new EntityNotFoundException("Cliente com ID " + dto.clienteId() + " não encontrado."));
 
-        // 2. Validar a regra de negócio principal
         if (produto.getStatus() != StatusProduto.EM_ESTOQUE) {
             throw new IllegalStateException("O produto '" + produto.getNome() + "' não está disponível para venda.");
         }
 
-        // 3. Atualizar o Produto
         produto.setStatus(StatusProduto.VENDIDO);
         produto.setDataVenda(LocalDateTime.now());
 
-        // 4. Criar e preencher a nova Venda
         Venda novaVenda = getVenda(dto, produto, cliente);
-
-        // 5. Salvar a nova Venda (o @Transactional garante que o produto também será salvo)
         Venda vendaSalva = vendaRepository.save(novaVenda);
 
-        // 6. Retornar o DTO de resposta
         return new VendaResponseDto(vendaSalva);
     }
 
+    /**
+     * Regista o pagamento da próxima parcela de uma venda.
+     * Se for a última parcela, o status da venda é atualizado para PAGO.
+     *
+     * @param vendaId O ‘ID’ da venda a ser atualizada.
+     * @return O {@link VendaResponseDto} com os dados da venda atualizada.
+     * @throws EntityNotFoundException se a venda não for encontrada.
+     * @throws IllegalStateException   se a venda já estiver totalmente paga.
+     */
     @Transactional
     public VendaResponseDto pagarProximaParcela(Long vendaId) {
         Venda venda = vendaRepository.findById(vendaId)
@@ -74,10 +96,8 @@ public class VendaService {
             throw new IllegalStateException("Esta venda já está totalmente paga.");
         }
 
-        // Incrementa o número de parcelas pagas
         venda.setParcelasPagas(venda.getParcelasPagas() + 1);
 
-        // Verifica se a venda foi totalmente paga
         if (venda.getParcelasPagas() >= venda.getTotalParcelas()) {
             venda.setStatus(StatusVenda.PAGO);
         }
@@ -86,6 +106,16 @@ public class VendaService {
         return new VendaResponseDto(vendaAtualizada);
     }
 
+    /**
+     * Cancela uma venda existente.
+     * Esta operação altera o status da venda para CANCELADO e retorna o produto
+     * associado ao estoque, alterando o seu status para EM_ESTOQUE.
+     *
+     * @param vendaId O ID da venda a ser cancelada.
+     * @return O {@link VendaResponseDto} da venda com o status atualizado.
+     * @throws EntityNotFoundException se a venda não for encontrada.
+     * @throws IllegalStateException   se a venda já estiver cancelada.
+     */
     @Transactional
     public VendaResponseDto cancelarVenda(Long vendaId) {
         Venda venda = vendaRepository.findById(vendaId)
@@ -95,18 +125,26 @@ public class VendaService {
             throw new IllegalStateException("Esta venda já está cancelada.");
         }
 
-        // Retorna o produto ao estoque
         Produto produto = venda.getProduto();
-        produto.setStatus(StatusProduto.EM_ESTOQUE);
-        produto.setDataVenda(null); // Limpa a data da venda
+        if (produto != null) {
+            produto.setStatus(StatusProduto.EM_ESTOQUE);
+            produto.setDataVenda(null);
+        }
 
-        // Atualiza o status da venda
         venda.setStatus(StatusVenda.CANCELADO);
 
         Venda vendaCancelada = vendaRepository.save(venda);
         return new VendaResponseDto(vendaCancelada);
     }
 
+    /**
+     * Monta uma nova entidade {@link Venda} a partir dos dados de entrada.
+     *
+     * @param dto     O DTO com os dados da requisição.
+     * @param produto A entidade {@link Produto} associada.
+     * @param cliente A entidade {@link Cliente} associada.
+     * @return Uma nova instância de {@link Venda}, preenchida e pronta para ser persistida.
+     */
     private static Venda getVenda(RegistrarVendaRequestDto dto, Produto produto, Cliente cliente) {
         Venda novaVenda = new Venda();
         novaVenda.setProduto(produto);
@@ -117,14 +155,12 @@ public class VendaService {
         novaVenda.setStatus(dto.status());
         novaVenda.setDataVencimento(dto.dataVencimento());
 
-        // Define as parcelas pagas iniciais
         if (dto.status() == StatusVenda.PAGO) {
             novaVenda.setParcelasPagas(dto.totalParcelas());
         } else {
             novaVenda.setParcelasPagas(0);
         }
 
-        // Calcula o lucro
         BigDecimal lucro = dto.precoVenda().subtract(produto.getPrecoCusto());
         novaVenda.setLucro(lucro);
         return novaVenda;

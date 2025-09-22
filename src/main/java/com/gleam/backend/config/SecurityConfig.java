@@ -17,6 +17,18 @@ import java.util.List;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
+/**
+ * <p>Classe central de configuração de segurança da aplicação.</p>
+ *
+ * <p>Utiliza o Spring Security para configurar:</p>
+ * <ul>
+ * <li>Regras de CORS (Cross-Origin Resource Sharing).</li>
+ * <li>Proteção contra CSRF (Cross-Site Request Forgery).</li>
+ * <li>Autorização de rotas (endpoints públicos e protegidos).</li>
+ * <li>O fluxo de autenticação via OAuth2 com o Google.</li>
+ * <li>A lógica de logout.</li>
+ * </ul>
+ */
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -24,20 +36,29 @@ public class SecurityConfig {
     @Value("${app.oauth2.redirect-uri}")
     private String redirectUri;
 
+    /**
+     * Configura a cadeia de filtros de segurança do Spring Security.
+     *
+     * @param http O objeto {@link HttpSecurity} para construir a configuração.
+     * @return O {@link SecurityFilterChain} configurado.
+     * @throws Exception se ocorrer um erro durante a configuração.
+     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                // Habilita o CORS usando a configuração definida no Bean abaixo
                 .cors(withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/", "/login", "/oauth2/**", "/error", "/logout").permitAll()
+                        // Exige autenticação para qualquer outra requisição.
                         .anyRequest().authenticated()
                 )
+                // Configura o fluxo de login com OAuth2.
                 .oauth2Login(oauth2 -> oauth2
                         .defaultSuccessUrl(redirectUri, true)
                         .failureUrl("/")
                 )
+                // Configura o processo de logout.
                 .logout(logout -> logout
                         .logoutUrl("/logout")
                         .logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler())
@@ -48,7 +69,15 @@ public class SecurityConfig {
         return http.build();
     }
 
-    // Bean para configurar as regras de CORS
+    /**
+     * Define as regras de CORS para a aplicação.
+     * <p>
+     * CORS é um mecanismo de segurança que permite que uma aplicação ‘web’
+     * num domínio aceda a recursos de outro domínio. Esta configuração
+     * especifica quais origens (frontends), métodos e cabeçalhos são permitidos.
+     *
+     * @return A fonte de configuração CORS.
+     */
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
@@ -59,7 +88,8 @@ public class SecurityConfig {
         ));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
-        configuration.setAllowCredentials(true); // Essencial para cookies/sessões
+        configuration.setAllowCredentials(true);
+
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;

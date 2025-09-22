@@ -9,6 +9,24 @@ import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+/**
+ * DTO para representar uma Venda na resposta da API.
+ * Fornece uma visão detalhada da transação, incluindo dados do produto e cliente.
+ *
+ * @param id                      O identificador único da venda.
+ * @param produto                 O DTO do produto vendido.
+ * @param clienteId               O ID do cliente.
+ * @param nomeCliente             O nome do cliente.
+ * @param precoVenda              O preço final da venda.
+ * @param lucro                   O lucro obtido na venda.
+ * @param formaPagamento          A forma de pagamento.
+ * @param totalParcelas           O número total de parcelas.
+ * @param parcelasPagas           O número de parcelas já pagas.
+ * @param valorTotalParcelasPagas O valor monetário total já pago.
+ * @param status                  O status financeiro da venda.
+ * @param dataVencimento          A data de vencimento para vendas pendentes.
+ * @param dataCriacao             A data em que a venda foi registada.
+ */
 public record VendaResponseDto(
         Long id,
         ProdutoDTO produto,
@@ -19,13 +37,15 @@ public record VendaResponseDto(
         FormaPagamento formaPagamento,
         Integer totalParcelas,
         Integer parcelasPagas,
-        BigDecimal valorTotalParcelasPagas, // nome alterado para melhor clareza
+        BigDecimal valorTotalParcelasPagas,
         StatusVenda status,
         LocalDate dataVencimento,
         LocalDateTime dataCriacao
 ) {
     /**
-     * Construtor para converter uma entidade Venda em um DTO.
+     * Construtor de conversão para criar um DTO a partir de uma entidade Venda.
+     *
+     * @param venda A entidade {@link Venda} de origem.
      */
     public VendaResponseDto(Venda venda) {
         this(
@@ -46,7 +66,10 @@ public record VendaResponseDto(
     }
 
     /**
-     * Método privado para calcular o valor total pago das parcelas.
+     * Calcula o valor total pago com base no número de parcelas pagas.
+     *
+     * @param venda A entidade Venda.
+     * @return O valor total pago como {@link BigDecimal}.
      */
     private static BigDecimal calcularValorTotalPago(Venda venda) {
         if (venda.getTotalParcelas() == null || venda.getTotalParcelas() <= 0 ||

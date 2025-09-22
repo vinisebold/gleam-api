@@ -12,8 +12,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 
 /**
- * Controller REST para gerir a entidade Fornecedor.
- * Expõe os endpoints da API para todas as operações de CRUD relacionadas a fornecedores.
+ * Controller REST para a gestão de Fornecedores.
+ * Expõe os endpoints da API para as operações de CRUD relacionadas a fornecedores.
  */
 @RestController
 @RequestMapping("/api/fornecedores")
@@ -23,9 +23,10 @@ public class FornecedorController {
     private final FornecedorService fornecedorService;
 
     /**
-     * Endpoint para criar um novo fornecedor.
+     * POST /api/fornecedores: cria um fornecedor.
+     *
      * @param dto O corpo da requisição com os dados do fornecedor.
-     * @return Resposta 201 Created com o DTO do novo fornecedor no corpo e a URI no cabeçalho Location.
+     * @return {@link ResponseEntity} com status 201 (Created) e o DTO do novo fornecedor no corpo.
      */
     @PostMapping
     public ResponseEntity<FornecedorDTO> createFornecedor(@RequestBody FornecedorDTO dto) {
@@ -36,9 +37,10 @@ public class FornecedorController {
     }
 
     /**
-     * Endpoint para listar todos os fornecedores de forma paginada.
-     * @param pageable Parâmetros de paginação (ex: ?page=0&size=10&sort=nome,asc).
-     * @return Uma página (Page) de FornecedorDTOs.
+     * GET /api/fornecedores: lista todos os fornecedores de forma paginada.
+     *
+     * @param pageable Parâmetros de paginação.
+     * @return {@link ResponseEntity} com status 200 (OK) e uma página de FornecedorDTOs.
      */
     @GetMapping
     public ResponseEntity<Page<FornecedorDTO>> getAllFornecedores(Pageable pageable) {
@@ -47,9 +49,10 @@ public class FornecedorController {
     }
 
     /**
-     * Endpoint para buscar um fornecedor específico pelo seu ID.
+     * GET /api/fornecedores/{‘id’} : busca um fornecedor pelo seu ‘ID’.
+     *
      * @param id O ID do fornecedor.
-     * @return O FornecedorDTO correspondente.
+     * @return {@link ResponseEntity} com status 200 (OK) e o FornecedorDTO no corpo.
      */
     @GetMapping("/{id}")
     public ResponseEntity<FornecedorDTO> getFornecedorById(@PathVariable Long id) {
@@ -58,10 +61,11 @@ public class FornecedorController {
     }
 
     /**
-     * Endpoint para atualizar um fornecedor existente.
-     * @param id O ID do fornecedor a ser atualizado.
+     * PUT /api/fornecedores/{id} : atualiza um fornecedor existente.
+     *
+     * @param id O ‘ID’ do fornecedor a ser atualizado.
      * @param dto O corpo da requisição com os novos dados.
-     * @return O FornecedorDTO atualizado.
+     * @return {@link ResponseEntity} com status 200 (OK) e o FornecedorDTO atualizado.
      */
     @PutMapping("/{id}")
     public ResponseEntity<FornecedorDTO> updateFornecedor(@PathVariable Long id, @RequestBody FornecedorDTO dto) {
@@ -70,9 +74,10 @@ public class FornecedorController {
     }
 
     /**
-     * Endpoint para apagar um fornecedor.
+     * DELETE /api/fornecedores/{id}: apaga um fornecedor.
+     *
      * @param id O ID do fornecedor a ser apagado.
-     * @return Resposta 204 No Content, indicando sucesso sem corpo de resposta.
+     * @return {@link ResponseEntity} com status 204 (No Content).
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteFornecedor(@PathVariable Long id) {

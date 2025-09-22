@@ -1,12 +1,20 @@
 package com.gleam.backend.dto;
 
 import com.gleam.backend.model.Fornecedor;
-import lombok.Data;
 
 import java.time.LocalDateTime;
 
 /**
- * DTO para representar um Fornecedor na API.
+ * DTO para a entidade Fornecedor.
+ * Representa os dados de um fornecedor na API.
+ *
+ * @param id              O identificador único do fornecedor.
+ * @param nome            O nome do fornecedor.
+ * @param cnpj            O CNPJ do fornecedor.
+ * @param telefone        O telefone de contato.
+ * @param descricao       Anotações sobre o fornecedor.
+ * @param dataCriacao     A data de registo do fornecedor.
+ * @param dataAtualizacao A data da última atualização.
  */
 public record FornecedorDTO(
         Long id,
@@ -27,7 +35,9 @@ public record FornecedorDTO(
         LocalDateTime dataAtualizacao
 ) {
     /**
-     * Construtor para converter uma entidade Fornecedor em um FornecedorDTO.
+     * Construtor de conversão para criar um DTO a partir de uma entidade Fornecedor.
+     *
+     * @param fornecedor A entidade {@link Fornecedor} de origem.
      */
     public FornecedorDTO(Fornecedor fornecedor) {
         this(

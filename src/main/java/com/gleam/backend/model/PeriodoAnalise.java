@@ -1,7 +1,10 @@
 package com.gleam.backend.model;
 
 /**
- * Enum unificado para definir os períodos de tempo para cards e gráficos.
+ * <p>Define os períodos disponíveis para as análises financeiras.</p>
+ *
+ * <p>Este enum serve como um filtro para os endpoints da API de análise,
+ * permitindo que o frontend solicite dados de lucro para diferentes intervalos de tempo</p>
  */
 public enum PeriodoAnalise {
     DIA,    // Usado pelo card
